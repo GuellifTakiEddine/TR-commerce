@@ -1,0 +1,339 @@
+.navbar{
+display: flex;
+justify-content: space-around;
+padding: 4px 16px;
+box-shadow: 0 1px 3px -2px black;
+background-color: #F5F5F5;
+}
+
+.marque{
+    display: flex;
+    align-items: center;
+
+}
+
+.marque img{
+    height: 75px;
+    width: 75px;
+}
+
+.navList{
+    display: flex;
+    align-items: center;
+    margin-left: 210px;
+    gap: 50px;
+    list-style: none;
+    font-size: 20px;
+    font-weight: 500;
+    color: #353839;
+}
+
+.navList li{
+
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    cursor: pointer;
+    gap: 3px;
+    padding: 8px 16px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    
+}
+
+.navList li:hover {
+    background-color: #f0f0f0;
+    transform: scale(1.1);
+    
+  }
+
+.login-profile-wish-cart{
+    display: flex;
+    align-items: center;
+    
+    gap:24px;
+}
+
+.login-profile-wish-cart img {
+    
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+  }
+  
+  .login-profile-wish-cart #profi{
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+
+  }
+
+  .navList li hr {
+    border: none;
+    height: 3px;
+    border-radius: 10px;
+    background: #BEBFC5;
+    width: 0;
+    transition: width 0.3s ease;
+    margin: 0;
+    opacity: 0;
+  }
+  
+  
+  .navList li.active hr {
+    width: 80%;
+    opacity: 1;
+  }
+  .navList li:active{
+    transform: scale(1);
+  }
+  
+
+  .cart-counter{
+    font-weight: 500;
+    width: 22px;
+    height: 22px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: -25px;
+    margin-left: -35px;
+  }
+
+
+  .login-profile-wish-cart img:hover {
+    transform: scale(1.2);
+}
+
+.navList a{
+
+  text-decoration: none;
+  color: inherit;
+}
+
+.login-profile-wish-cart img:active{
+  transform: scale(1);
+}
+
+.profile-container {
+  position: relative;
+  display: inline-block;
+}
+
+.profile-dropdown {
+  position: absolute;
+  top: 110%; /* below the profile icon */
+  right: -130px;
+  background-color:#F5F5F5;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  z-index: 100;
+  width: 300px;
+  height: 400px;
+}
+
+.profile-dropdown form {
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-dropdown input {
+  padding: 8px 10px;
+  margin-bottom: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.profile-dropdown button {
+  padding: 8px 12px;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.profile-dropdown button:hover {
+  background-color: #2980b9;
+}
+.divider {
+  top: 26px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 10px 0;
+}
+
+.divider hr {
+  flex: 1;
+  border: none;
+  border-top: 1px solid #ccc;
+}
+
+.divider span {
+  padding: 0 10px;
+  color: #555;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.google-sign-in-up img{
+  position: relative;
+  bottom: -39px;
+  cursor: pointer;
+  height: 45px;
+  width: 45px;
+  right: 50px;  
+}
+.dropdown-title{
+  right: 85px;
+  position: relative;
+  bottom: 1px;
+}
+
+.create-account-link{
+  position: relative;
+  bottom: 360px;
+  left: 70px;
+  
+}
+
+.create-account-link a {
+  
+  text-decoration: none; /* Remove the underline */
+  font-size: 14px;
+  position: relative;
+  bottom: 87px;
+  left: 20px;
+}
+
+.create-account-link a:hover {
+  
+  text-decoration: none; /* Ensure no underline on hover */
+}
+
+.forget-password a{
+  text-decoration: none;
+  position: relative;
+  bottom: 260px;
+  font-weight: 200;
+  font-size: 13px;
+  right: 100px;
+
+}
+
+.forget-password a:hover{
+  text-decoration: none;
+  
+ 
+}
+
+#sub-login{
+  top:16px;
+  position: relative;
+  background-color: #3498db;
+}
+
+.profile-dropdown input{
+  height: 18px;
+}
+
+.google-text{
+  position: relative;
+  top: 29px;
+  right: 50px;
+  color: #555555;
+}
+
+#rememberMe{
+  position: relative;
+  right: 90px;
+  top: 15px;
+}
+
+#text-checkbox{
+  position: relative;
+  right: 88px;
+  font-weight: 200;
+  font-size: 13px;
+  
+  top: 10px;
+}
+
+#login-password{
+  position: relative;
+  top: 10px;
+}
+
+#login-email{
+  position: relative;
+  top: 10px;
+}
+
+.dropdown-logo{
+  position: relative;
+  top: 46px;
+  right: 135px;
+}
+
+.facebook-logo img{
+  position: relative;
+  cursor: pointer;
+  height: 58px;
+  width: 58px;
+  left: 50px;
+  bottom: 70px;
+}
+
+.facebook-text{
+   position: relative;
+  top: -86px;
+  left: 50px;
+  color: #555555;
+}
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  
+  background-color: #E5E4E2;
+  border-radius: 20px;
+  padding: 6px 12px;
+  margin-top: 25px;
+  height: 35px; 
+  
+  box-sizing: border-box;
+  top: 20px;
+}
+
+
+.search-bar input {
+  border: none;
+  background: transparent;
+  outline: none;
+  font-size: 16px;
+  width: 150px;
+  height: 100%; /* ⬅️ ensure full height */
+}
+
+.search-bar button {
+  background: none;
+  border: none;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  cursor: pointer;
+}
+
+.search-bar img {
+  width: 20px;
+  height: 20px;
+  display: block;
+}

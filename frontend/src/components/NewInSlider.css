@@ -1,0 +1,84 @@
+.newin-wrapper {
+  margin: 40px auto;
+  text-align: center;
+  position: relative;
+}
+
+.newin-label-inside {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  padding: 8px 16px;
+  font-size: 16px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.newin-label-inside.light {
+  color: black;
+  background: rgba(255, 255, 255, 0.5); /* Fond blanc semi-transparent */
+  border: 1px solid rgba(0, 0, 0, 0.3);
+}
+
+.newin-label-inside.dark {
+  color: white;
+  background: rgba(0, 0, 0, 0.6); /* Fond noir semi-transparent */
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* Autres styles existants */
+.newin-slider-horizontal {
+  display: flex;
+  overflow: hidden;
+  width: 100%;
+  max-width: 1520px;
+  margin: 0 auto;
+  scroll-behavior: smooth;
+}
+
+.newin-slide-horizontal {
+  flex-shrink: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transition: transform 0.5s ease-in-out;
+}
+
+.slider-arrows {
+  display: flex;
+  justify-content: space-between;
+  position: absolute;
+  top: 50%;
+  width: 100%;
+  transform: translateY(-50%);
+}
+
+.arrow-left, .arrow-right {
+  background-color: transparent;
+  border: none;
+  font-size: 2rem;
+  color: #111;
+  cursor: pointer;
+  transition: transform 0.3s;
+}
+
+.progress-bar-wrapper {
+  width: 100%;
+  height: 5px;
+  background-color: #e0e0e0;
+  border-radius: 2px;
+  overflow: hidden;
+  margin-top: 10px;
+}
+
+.progress-bar {
+  height: 100%;
+  width: 0%;
+  background-color: #111;
+  border-radius: 2px;
+  transition: width 0.5s ease; /* make it smooth */
+}
+
