@@ -1,0 +1,229 @@
+.footer {
+    background-color: #1f1f1f;
+    color: #454242;
+    padding: 60px 20px 30px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    position: relative;
+    opacity: 0;
+    animation: footerFade 1s ease forwards;
+    animation-delay: 0.2s;
+  }
+  
+  @keyframes footerFade {
+    to { opacity: 1; }
+  }
+  
+  .footer-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+  }
+  
+  .footer-section {
+    animation: fadeIn 0.5s ease forwards;
+  }
+  
+  .footer-section:nth-child(1) { animation-delay: 0.1s; }
+  .footer-section:nth-child(2) { animation-delay: 0.2s; }
+  .footer-section:nth-child(3) { animation-delay: 0.3s; }
+  .footer-section:nth-child(4) { animation-delay: 0.4s; }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  .footer-section h3,
+  .footer-section h4 {
+    color: #fff;
+    margin-bottom: 20px;
+    font-size: 1.2rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    position: relative;
+    padding-bottom: 10px;
+  }
+  .footer-section h3 {
+    color: #fff;
+    margin-bottom: 20px;
+    font-size: 1.2rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    position: relative;
+    padding-bottom: 10px;
+  }
+  
+  .footer-section h3::after {
+    display: none; 
+  }
+  
+  .footer-section h3::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 50px;
+    height: 2px;
+    background-color: #00bcd4;
+  }
+  
+  .footer-section h4 {
+    font-size: 1rem;
+    margin-bottom: 15px;
+  }
+  
+  .footer-section p {
+    font-size: 0.9rem;
+    line-height: 1.7;
+    color: #aaa;
+  }
+  
+  .footer-section ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .footer-section ul li {
+    margin-bottom: 12px;
+  }
+  
+  .footer-section ul li a {
+    display: inline-block;
+    text-decoration: none;
+    color: #ccc;
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+  }
+  
+  .footer-section ul li a:hover {
+    color: #b3b3b3;
+    transform: translateX(5px);
+  }
+  
+  /* Social icons section */
+  .social-icons {
+    display: flex;
+    justify-content: center; /* Centrer les icônes sous "Follow Us" */
+    gap: 15px;
+    margin-top: 20px;
+  }
+  
+  .social-icons a {
+    display: inline-block;
+    transition: all 0.3s ease;
+  }
+  
+  .social-icons img {
+    width: 32px;
+    height: 32px;
+    filter: brightness(0.8);
+    transition: all 0.3s ease;
+  }
+  
+  .social-icons img:hover {
+    transform: scale(1.15);
+    filter: brightness(1);
+    box-shadow: 0 4px 8px rgba(0, 188, 212, 0.3);
+  }
+  
+  /* Newsletter styles */
+  .footer-section.newsletter form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .footer-section.newsletter input {
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    font-size: 0.9rem;
+  }
+  
+  .footer-section.newsletter button {
+    background-color: #6d898d;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  .footer-bottom {
+    text-align: center;
+    margin-top: 60px;
+    font-size: 0.85rem;
+    color: #777;
+    border-top: 1px solid #333;
+    padding-top: 25px;
+  }
+  
+  /* Responsive */
+  @media (max-width: 768px) {
+    .footer {
+      padding: 50px 15px 20px;
+    }
+  
+    .footer-container {
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .footer-container {
+      grid-template-columns: 1fr;
+      gap: 25px;
+    }
+  
+    .footer-section h3,
+    .footer-section h4 {
+      text-align: center;
+    }
+  
+
+    .footer-section ul {
+      text-align: center;
+    }
+  
+    .social-icons {
+      justify-content: center;
+    }
+
+    .footer-section.payment-methods {
+        margin-top: 30px;
+      }
+      
+      .footer-section.payment-methods h4 {
+        color: #fff;
+        font-size: 1.1rem;
+        margin-bottom: 15px;
+      }
+      
+      .payment-icons {
+        display: flex;
+        gap: 20px;  /* Espacement entre les icônes */
+        justify-content: center;
+      }
+      
+      .payment-icons img {
+        width: 40px;  /* Ajuste la taille des icônes selon tes préférences */
+        height: auto;
+        transition: transform 0.3s ease;
+      }
+      
+      .payment-icons img:hover {
+        transform: scale(1.1);  /* Agrandit les icônes au survol */
+      }
+      
+ 
+ 
+ 
+}
+  

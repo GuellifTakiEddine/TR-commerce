@@ -1,0 +1,59 @@
+import React from "react";
+import './footer.css';
+import facebookIcon from './images/facebook.svg';
+import twitterIcon from './images/twitter.svg';
+import instagramIcon from './images/instagram.svg';
+import paypalIcon from './images/paypal.svg'; 
+import visaIcon from './images/visa.svg';
+import tiktokIcon from './images/tiktok.svg'
+const Footer = () => {
+  return (
+    <footer className="footer">
+      <div className="footer-container">
+
+        <div className="footer-section about">
+          <h3>Your Brand</h3>
+          <p>Your E-commerce Website - delivering quality and service since 2025.</p>
+        </div>
+
+        <div className="footer-section links">
+          <h4>Quick Links</h4>
+          <ul>
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Terms of Service</a></li>
+            <li><a href="#">About Us</a></li>
+            <li><a href="#">Contact</a></li>
+          </ul>
+        </div>
+
+        <div className="footer-section social">
+          <h4>Follow Us</h4>
+          <div className="social-icons">
+            <a href="#"><img src={facebookIcon} alt="Facebook" /></a>
+            <a href="#"><img src={twitterIcon} alt="Twitter" /></a>
+            <a href="#"><img src={instagramIcon} alt="Instagram" /></a>
+            <a href="#"><img src={tiktokIcon} alt="Tiktok" /></a>
+
+
+          </div>
+        </div>
+
+        <div className="footer-section payment-methods">
+          <h4>Payment Methods</h4>
+          <div className="payment-icons">
+            <img src={paypalIcon} alt="PayPal" />
+            <img src={visaIcon} alt="Visa" />
+    
+          </div>
+        </div>
+
+      </div>
+
+      <div className="footer-bottom">
+        <p>&copy; 2025 Your E-commerce Website. All rights reserved.</p>
+      </div>
+    </footer>
+  );
+};
+
+export default Footer;
