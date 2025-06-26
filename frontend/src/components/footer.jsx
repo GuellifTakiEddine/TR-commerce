@@ -1,6 +1,6 @@
 import React from "react";
 import './footer.css';
-import facebookIcon from './images/facebook.svg';
+import facebookBlackIcon from './images/facebookblack.svg';
 import twitterIcon from './images/twitter.svg';
 import instagramIcon from './images/instagram.svg';
 import paypalIcon from './images/paypal.svg'; 
@@ -29,7 +29,7 @@ const Footer = () => {
         <div className="footer-section social">
           <h4>Follow Us</h4>
           <div className="social-icons">
-            <a href="#"><img src={facebookIcon} alt="Facebook" /></a>
+            <a href="#"><img src={facebookBlackIcon} alt="Facebook" /></a>
             <a href="#"><img src={twitterIcon} alt="Twitter" /></a>
             <a href="#"><img src={instagramIcon} alt="Instagram" /></a>
             <a href="#"><img src={tiktokIcon} alt="Tiktok" /></a>
