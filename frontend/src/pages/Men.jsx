@@ -13,7 +13,7 @@ const mensProducts = [
   },
   {
     id: 2,
-    category: "Chaussures",
+    category: "Shoes",
     title: "Running Shoes",
     price: "89.99",
     colors: 4,
@@ -21,7 +21,7 @@ const mensProducts = [
   },
   {
     id: 3,
-    category: "Pantalons",
+    category: "Pants",
     title: "Slim Fit Jeans",
     price: "69.99",
     colors: 3,
@@ -45,7 +45,7 @@ const mensProducts = [
   },
   {
     id: 6,
-    category: "Chaussures",
+    category: "Shoes",
     title: "Casual Sneakers",
     price: "74.99",
     colors: 2,
@@ -54,7 +54,7 @@ const mensProducts = [
 ];
 
 const Mens = () => {
-  const categories = ["All", "T-Shirts", "Chaussures", "Pantalons", "Accessoires"];
+  const categories = ["All", "T-Shirts", "Shoes", "Pants", "Accessoires"];
   const [selectedCategory, setSelectedCategory] = useState("All");
 
   const filteredProducts =
