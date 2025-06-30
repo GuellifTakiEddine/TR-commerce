@@ -13,7 +13,7 @@ const productsData = [
   },
   { 
     id: 2, 
-    category: "Chaussures", 
+    category: "Shoes", 
     title: "Running Shoes",
     price: "79.99",
     colors: 4,
@@ -45,7 +45,7 @@ const productsData = [
   },
   { 
     id: 6, 
-    category: "Chaussures", 
+    category: "Shoes", 
     title: "Leather Boots",
     price: "99.99",
     colors: 2,
@@ -54,7 +54,7 @@ const productsData = [
 ];
 
 const Womens = () => {
-  const categories = ["All", "Tops", "Chaussures", "Pants", "Accessories"];
+  const categories = ["All", "Tops", "Shoes", "Pants", "Accessories"];
   const [selectedCategory, setSelectedCategory] = useState("All");
 
   const filteredProducts =
