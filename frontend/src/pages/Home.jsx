@@ -7,7 +7,7 @@ const Home=() =>{
 return (
     <><div>
     <NewInSlider />
-<h1>heloo</h1>
+
   </div><Footer /></>
   
   );
