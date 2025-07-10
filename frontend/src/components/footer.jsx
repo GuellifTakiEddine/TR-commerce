@@ -12,8 +12,8 @@ const Footer = () => {
       <div className="footer-container">
 
         <div className="footer-section about">
-          <h3>Your Brand</h3>
-          <p>Your E-commerce Website - delivering quality and service since 2025.</p>
+          <h3>TR</h3>
+          <p>TR Website - delivering quality and service since 2025.</p>
         </div>
 
         <div className="footer-section links">
@@ -50,7 +50,7 @@ const Footer = () => {
       </div>
 
       <div className="footer-bottom">
-        <p>&copy; 2025 Your E-commerce Website. All rights reserved.</p>
+        <p>&copy; 2025 TR Website. All rights reserved.</p>
       </div>
     </footer>
   );
