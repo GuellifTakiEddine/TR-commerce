@@ -1,70 +1,40 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Product from "../components/product";
 import Footer from "../components/footer";
 
-const mensProducts = [
-  {
-    id: 1,
-    category: "T-Shirts",
-    title: "Basic Tee",
-    price: "29.99",
-    colors: 2,
-    images: ["/images/mens-tshirt1.jpg"],
-  },
-  {
-    id: 2,
-    category: "Shoes",
-    title: "Running Shoes",
-    price: "89.99",
-    colors: 4,
-    images: ["/images/mens-shoes1.jpg"],
-  },
-  {
-    id: 3,
-    category: "Pants",
-    title: "Slim Fit Jeans",
-    price: "69.99",
-    colors: 3,
-    images: ["/images/mens-jeans1.jpg"],
-  },
-  {
-    id: 4,
-    category: "Accessoires",
-    title: "Leather Belt",
-    price: "49.99",
-    colors: 1,
-    images: ["/images/mens-belt1.jpg"],
-  },
-  {
-    id: 5,
-    category: "T-Shirts",
-    title: "Printed Shirt",
-    price: "39.99",
-    colors: 5,
-    images: ["/images/mens-shirt1.jpg"],
-  },
-  {
-    id: 6,
-    category: "Shoes",
-    title: "Casual Sneakers",
-    price: "74.99",
-    colors: 2,
-    images: ["/images/mens-sneakers1.jpg"],
-  },
-];
-
 const Mens = () => {
-  const categories = ["All", "T-Shirts", "Shoes", "Pants", "Accessoires"];
+  const categories = ["All", "T-Shirts", "Shoes", "Pants", "Accessories"];
   const [selectedCategory, setSelectedCategory] = useState("All");
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const filteredProducts =
-    selectedCategory === "All"
-      ? mensProducts
-      : mensProducts.filter((p) => p.category === selectedCategory);
+  useEffect(() => {
+    fetch("http://localhost:5000/products")
+      .then(res => res.json())
+      .then(data => {
+        console.log("Fetched products:", data);
+        setProducts(data);
+        setLoading(false);
+      })
+      .catch(err => {
+        console.error("Error fetching products:", err);
+        setLoading(false);
+      });
+  }, []);
+const filteredProducts =
+  selectedCategory === "All"
+    ? products
+    : products.filter((p) => p.type === selectedCategory);
+
+console.log("Categories in DB:", products.map(p => p.category));
+
+console.log("Selected category:", selectedCategory);
+console.log("Products:", products);
+console.log("Filtered products:", filteredProducts);
 
   return (
     <>
-      {/* Catégories */}
+      {/* Category buttons */}
       <div
         style={{
           display: "flex",
@@ -82,12 +52,8 @@ const Mens = () => {
               padding: "8px 16px",
               cursor: "pointer",
               borderRadius: "20px",
-              border:
-                selectedCategory === cat
-                  ? "2px solid #000"
-                  : "2px solid transparent",
-              backgroundColor:
-                selectedCategory === cat ? "#000" : "#f0f0f0",
+              border: selectedCategory === cat ? "2px solid #000" : "2px solid transparent",
+              backgroundColor: selectedCategory === cat ? "#000" : "#f0f0f0",
               color: selectedCategory === cat ? "#fff" : "#333",
               fontWeight: "600",
               transition: "all 0.3s ease",
@@ -98,7 +64,7 @@ const Mens = () => {
         ))}
       </div>
 
-      {/* Produits filtrés */}
+      {/* Products grid */}
       <div
         style={{
           display: "flex",
@@ -108,17 +74,22 @@ const Mens = () => {
           padding: "20px",
         }}
       >
-        {filteredProducts.map((prod) => (
-          <Product
-            key={prod.id}
-            id={prod.id}
-            title={prod.title}
-            brand={prod.brand}
-            price={prod.price}
-            colors={prod.colors}
-            images={prod.images}
-          />
-        ))}
+        {loading ? (
+          <div>Loading products...</div>
+        ) : filteredProducts.length === 0 ? (
+          <div>No products found.</div>
+        ) : (
+          filteredProducts.map((prod, i) => (
+            <Product
+              key={prod._id || i}
+              title={prod.name}
+              brand={prod.brand}
+              price={prod.price}
+              colors={prod.colors}
+              images={[prod.photos || prod["photos "] || "https://via.placeholder.com/300"]}
+            />
+          ))
+        )}
       </div>
 
       <Footer />
