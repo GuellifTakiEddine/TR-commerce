@@ -10,6 +10,7 @@ import Kids from './pages/Kids';
 import Discover from './pages/Discover';
 import Wishlist from './pages/Wishlist';
 import Cart from './pages/Cart';
+import Register from './pages/Register';
 
 function App() {
   return (
@@ -24,7 +25,8 @@ function App() {
               <Route path='/discover' element={<Discover/>}/> 
               <Route path='/wishlist' element={<Wishlist/>}/> 
               <Route path='/cart' element={<Cart/>}/> 
-            
+              <Route path="/create-account" element={<Register />} />
+
           </Routes>
      </BrowserRouter>
     </div>
