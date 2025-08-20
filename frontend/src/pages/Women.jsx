@@ -1,70 +1,41 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Product from "../components/product";
 import Footer from "../components/footer";
 
-const productsData = [
-  { 
-    id: 1, 
-    category: "Tops", 
-    title: "Bodies",
-    price: "25.99",
-    colors: 3,
-    images: ["/images/bodies.jpg"] 
-  },
-  { 
-    id: 2, 
-    category: "Shoes", 
-    title: "Running Shoes",
-    price: "79.99",
-    colors: 4,
-    images: ["/images/womens-running-shoes.jpg"] // ajoute une image ou laisse vide
-  },
-  { 
-    id: 3, 
-    category: "Pants", 
-    title: "Jeans Slim",
-    price: "59.99",
-    colors: 2,
-    images: ["/images/womens-jeans.jpg"]
-  },
-  { 
-    id: 4, 
-    category: "Accessories", 
-    title: "Stylish Hat",
-    price: "39.99",
-    colors: 1,
-    images: ["/images/womens-hat.jpg"]
-  },
-  { 
-    id: 5, 
-    category: "Tops", 
-    title: "Summer Blouse",
-    price: "29.99",
-    colors: 3,
-    images: ["/images/womens-blouse.jpg"]
-  },
-  { 
-    id: 6, 
-    category: "Shoes", 
-    title: "Leather Boots",
-    price: "99.99",
-    colors: 2,
-    images: ["/images/womens-boots.jpg"]
-  },
-];
-
 const Womens = () => {
-  const categories = ["All", "Tops", "Shoes", "Pants", "Accessories"];
+  const categories = ["All", "Tops", "Shoes", "Pants & Dresses", "Accessories"];
   const [selectedCategory, setSelectedCategory] = useState("All");
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch("http://localhost:5000/products")
+      .then((res) => res.json())
+      .then((data) => {
+        console.log("Fetched products:", data);
+        const womenProducts = data.filter((p) => p.gender === "Women");
+        setProducts(womenProducts);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error("Error fetching products:", err);
+        setLoading(false);
+      });
+  }, []);
 
   const filteredProducts =
     selectedCategory === "All"
-      ? productsData
-      : productsData.filter((p) => p.category === selectedCategory);
+      ? products
+      : products.filter((p) => p.type === selectedCategory);
+
+  console.log("Categories in DB:", products.map((p) => p.category));
+  console.log("Selected category:", selectedCategory);
+  console.log("Products:", products);
+  console.log("Filtered products:", filteredProducts);
 
   return (
     <>
-      {/* Boutons catégories */}
+      {}
       <div
         style={{
           display: "flex",
@@ -98,7 +69,7 @@ const Womens = () => {
         ))}
       </div>
 
-      {/* Produits filtrés */}
+      {}
       <div
         style={{
           display: "flex",
@@ -108,16 +79,24 @@ const Womens = () => {
           padding: "20px",
         }}
       >
-        {filteredProducts.map((prod) => (
-          <Product
-            key={prod.id}
-            id={prod.id}
-            title={prod.title}
-            price={prod.price}
-            colors={prod.colors}
-            images={prod.images}
-          />
-        ))}
+        {loading ? (
+          <div>Loading products...</div>
+        ) : filteredProducts.length === 0 ? (
+          <div>No products found.</div>
+        ) : (
+          filteredProducts.map((prod, i) => (
+            <Product
+              key={prod._id || i}
+              title={prod.name}
+              brand={prod.brand}
+              price={prod.price}
+              colors={prod.colors}
+              images={[
+                prod.photos || prod["photos "] || "https://via.placeholder.com/300",
+              ]}
+            />
+          ))
+        )}
       </div>
 
       <Footer />
