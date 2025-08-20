@@ -3,7 +3,7 @@ import Product from "../components/product";
 import Footer from "../components/footer";
 
 const Mens = () => {
-  const categories = ["All", "T-Shirts", "Shoes", "Pants", "Accessories"];
+  const categories = ["All", "Tops", "Shoes", "Pants", "Accessories"];
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
