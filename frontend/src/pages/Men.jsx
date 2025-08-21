@@ -3,7 +3,7 @@ import Product from "../components/product";
 import Footer from "../components/footer";
 
 const Mens = () => {
-  const categories = ["All", "Tops", "Shoes", "Pants", "Accessories"];
+  const categories = ["All", "T-Shirts", "Shoes", "Pants", "Accessories"];
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -13,7 +13,9 @@ const Mens = () => {
       .then(res => res.json())
       .then(data => {
         console.log("Fetched products:", data);
-        setProducts(data);
+        // Only take products for men
+        const menProducts = data.filter(p => p.category?.toLowerCase() === "men");
+        setProducts(menProducts);
         setLoading(false);
       })
       .catch(err => {
@@ -21,16 +23,16 @@ const Mens = () => {
         setLoading(false);
       });
   }, []);
-const filteredProducts =
-  selectedCategory === "All"
-    ? products
-    : products.filter((p) => p.type === selectedCategory);
 
-console.log("Categories in DB:", products.map(p => p.category));
+  const filteredProducts = 
+    selectedCategory === "All"
+      ? products
+      : products.filter(p => p.type === selectedCategory);
 
-console.log("Selected category:", selectedCategory);
-console.log("Products:", products);
-console.log("Filtered products:", filteredProducts);
+  console.log("Categories in DB:", products.map(p => p.type));
+  console.log("Selected category:", selectedCategory);
+  console.log("Products:", products);
+  console.log("Filtered products:", filteredProducts);
 
   return (
     <>
