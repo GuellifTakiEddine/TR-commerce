@@ -13,7 +13,7 @@
 .register-image {
   flex: 1;
   display: flex;
-  max-height: 100vh;
+  
 }
 
 .register-image img {
