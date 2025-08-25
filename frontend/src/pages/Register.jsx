@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import "./Register.css";
 import registerImage from "../components/images/register-side.jpg";
-
 import Footer from "../components/footer";
 
 const Register = () => {
@@ -13,30 +12,75 @@ const Register = () => {
     confirmPassword: ""
   });
 
+  const [message, setMessage] = useState("");
+  const [messageType, setMessageType] = useState(""); // "success" or "error"
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (formData.password !== formData.confirmPassword) {
-      alert("Passwords do not match!");
+      setMessage("Passwords do not match!");
+      setMessageType("error");
       return;
     }
-    alert("Account created successfully!");
+
+    try {
+      const res = await fetch("http://localhost:5000/create-account", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          password: formData.password
+        })
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        setMessage("Account created successfully!");
+        setMessageType("success");
+        setFormData({
+          name: "",
+          email: "",
+          phone: "",
+          password: "",
+          confirmPassword: ""
+        });
+      } else {
+        setMessage(data.error || "Something went wrong");
+        setMessageType("error");
+      }
+    } catch (err) {
+      console.error(err);
+      setMessage("Server error");
+      setMessageType("error");
+    }
   };
 
   return (
     <>
       <div className="register-wrapper">
-        {/* Colonne gauche avec image */}
+        {/* Left column with image */}
         <div className="register-image">
           <img src={registerImage} alt="Register" />
         </div>
 
-        {/* Colonne droite avec formulaire */}
+        {/* Right column with form */}
         <div className="register-container">
           <h2>Create an Account</h2>
+
+          {message && (
+            <div className={`message ${messageType}`}>
+              {message}
+            </div>
+          )}
+
           <form onSubmit={handleSubmit} noValidate>
             <input
               type="text"
