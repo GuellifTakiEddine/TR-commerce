@@ -5,5 +5,8 @@
     "start": "concurrently \"npm run server\" \"npm run client\"",
     "server": "cd backend && npm start",
     "client": "cd frontend && npm start"
+  },
+  "dependencies": {
+    "react-hot-toast": "^2.6.0"
   }
 }
