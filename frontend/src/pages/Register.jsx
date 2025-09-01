@@ -3,6 +3,9 @@ import "./Register.css";
 import registerImage from "../components/images/register-side.jpg";
 import Footer from "../components/footer";
 
+import passwordShow from "../components/images/eye-show.svg";
+import passwordHide from "../components/images/eye-off.svg";
+
 const Register = () => {
   const [formData, setFormData] = useState({
     name: "",
@@ -63,6 +66,9 @@ const Register = () => {
     }
   };
 
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
   return (
     <>
       <div className="register-wrapper">
@@ -82,53 +88,69 @@ const Register = () => {
           )}
 
           <form onSubmit={handleSubmit} noValidate>
-            <input
-              type="text"
-              name="name"
-              placeholder="Full Name"
-              value={formData.name}
-              onChange={handleChange}
-              required
-            />
+  <input
+    type="text"
+    name="name"
+    placeholder="Full Name"
+    value={formData.name}
+    onChange={handleChange}
+    required
+  />
 
-            <input
-              type="email"
-              name="email"
-              placeholder="Email Address"
-              value={formData.email}
-              onChange={handleChange}
-              required
-            />
+  <input
+    type="email"
+    name="email"
+    placeholder="Email Address"
+    value={formData.email}
+    onChange={handleChange}
+    required
+  />
 
-            <input
-              type="tel"
-              name="phone"
-              placeholder="Phone Number"
-              value={formData.phone}
-              onChange={handleChange}
-              required
-            />
+  <input
+    type="tel"
+    name="phone"
+    placeholder="Phone Number"
+    value={formData.phone}
+    onChange={handleChange}
+    required
+  />
 
-            <input
-              type="password"
-              name="password"
-              placeholder="Password"
-              value={formData.password}
-              onChange={handleChange}
-              required
-            />
+  <div className="password-wrapper">
+    <input
+      type={showPassword ? "text" : "password"}
+      name="password"
+      placeholder="Password"
+      value={formData.password}
+      onChange={handleChange}
+      required
+    />
+    <img
+      src={showPassword ? passwordHide : passwordShow}
+      alt="Toggle password"
+      className="password-toggle"
+      onClick={() => setShowPassword(!showPassword)}
+    />
+  </div>
 
-            <input
-              type="password"
-              name="confirmPassword"
-              placeholder="Confirm Password"
-              value={formData.confirmPassword}
-              onChange={handleChange}
-              required
-            />
+  <div className="password-wrapper">
+    <input
+      type={showConfirmPassword ? "text" : "password"}
+      name="confirmPassword"
+      placeholder="Confirm Password"
+      value={formData.confirmPassword}
+      onChange={handleChange}
+      required
+    />
+    <img
+      src={showConfirmPassword ? passwordHide : passwordShow}
+      alt="Toggle confirm password"
+      className="password-toggle"
+      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+    />
+  </div>
 
-            <button type="submit">Sign Up</button>
-          </form>
+  <button className="sign-up-btn" type="submit">Sign Up</button>
+</form>
         </div>
       </div>
       <Footer />
