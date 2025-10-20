@@ -1,7 +1,8 @@
 import Navbar from './components/Navbar';
 import './App.css';
 import{BrowserRouter,Routes,Route} from 'react-router-dom';
-import Product from './components/product';
+
+
 
 import Home from './pages/Home';
 import Mens from './pages/Men';
@@ -29,7 +30,10 @@ function App() {
 
           </Routes>
      </BrowserRouter>
+     
     </div>
+
+
   );
 }
 
