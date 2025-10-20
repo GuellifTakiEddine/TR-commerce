@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Product from "../components/product";
+import Product from "../components/Product";
 import Footer from "../components/footer";
 
 const Womens = () => {
