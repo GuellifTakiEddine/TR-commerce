@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import './Navbar.css';
 import wishIcon from './images/wishlist.svg';
 import cartIcon from './images/cart.svg';
@@ -12,12 +12,14 @@ import facebookIcon from './images/facebook.svg';
 import searchIcon from './images/search.svg';
 import passwordShow from "../components/images/eye-show.svg";
 import passwordHide from "../components/images/eye-off.svg";
+import trackOrder from "../components/images/track.svg";
+import order from "../components/images/order.svg";
 
 import { Link, useNavigate, useLocation } from "react-router-dom";
 
 const Navbar = () => {
   const navigate = useNavigate();
-  const location = useLocation(); // <— NEW: detect current route
+  const location = useLocation();
 
   const [wishHover, setWishHover] = useState(false);
   const [cartHover, setCartHover] = useState(false);
@@ -27,13 +29,71 @@ const Navbar = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [searchText, setSearchText] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
-  const handleLogin = (e) => {
-    e.preventDefault();
-    console.log("Email:", email, "Password:", password);
-    setEmail("");
-    setPassword("");
-  };
+  // NEW: logged-in user state
+  const [user, setUser] = useState(null);
+
+  // Load user from localStorage if present
+  useEffect(() => {
+  const remember = localStorage.getItem("rememberMe") === "true";
+  const storedUser = remember
+    ? localStorage.getItem("user") // from permanent storage
+    : sessionStorage.getItem("user"); // from temporary session
+
+  if (storedUser) {
+    setUser(JSON.parse(storedUser));
+    setRememberMe(remember);
+  }
+}, []);
+
+  
+  const handleLogin = async (e) => {
+  e.preventDefault();
+
+  try {
+    const res = await fetch("/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password }),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      console.error("Login failed:", data.error);
+      alert(data.error);
+    } else {
+      console.log("Login successful:", data);
+
+      setUser(data.user);
+
+      if (rememberMe) {
+        localStorage.setItem("user", JSON.stringify(data.user));
+        localStorage.setItem("rememberMe", "true");
+      } else {
+        sessionStorage.setItem("user", JSON.stringify(data.user));
+        localStorage.removeItem("rememberMe");
+      }
+    }
+  } catch (err) {
+    console.error("Error logging in:", err);
+    alert("Server error. Please try again.");
+  }
+
+  setEmail("");
+  setPassword("");
+};
+
+
+
+const handleLogout = () => {
+  setUser(null);
+  localStorage.removeItem("user");
+  sessionStorage.removeItem("user");
+  localStorage.removeItem("rememberMe");
+};
+
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -43,9 +103,8 @@ const Navbar = () => {
     }
   };
 
-  // Function to check if path is active
   const isActive = (path) => location.pathname === path;
-const [showPassword, setShowPassword] = useState(false);
+
   return (
     <div className="navbar">
       <div className="marque">
@@ -53,36 +112,11 @@ const [showPassword, setShowPassword] = useState(false);
       </div>
 
       <ul className="navList">
-        <Link to="/">
-          <li className={isActive("/") ? "active" : ""}>
-            HOME
-            <hr />
-          </li>
-        </Link>
-        <Link to="/men">
-          <li className={isActive("/men") ? "active" : ""}>
-            MEN
-            <hr />
-          </li>
-        </Link>
-        <Link to="/women">
-          <li className={isActive("/women") ? "active" : ""}>
-            WOMEN
-            <hr />
-          </li>
-        </Link>
-        <Link to="/kids">
-          <li className={isActive("/kids") ? "active" : ""}>
-            KIDS
-            <hr />
-          </li>
-        </Link>
-        <Link to="/discover">
-          <li className={isActive("/discover") ? "active" : ""}>
-            DISCOVER
-            <hr />
-          </li>
-        </Link>
+        <Link to="/"><li className={isActive("/") ? "active" : ""}>HOME<hr/></li></Link>
+        <Link to="/men"><li className={isActive("/men") ? "active" : ""}>MEN<hr/></li></Link>
+        <Link to="/women"><li className={isActive("/women") ? "active" : ""}>WOMEN<hr/></li></Link>
+        <Link to="/kids"><li className={isActive("/kids") ? "active" : ""}>KIDS<hr/></li></Link>
+        <Link to="/discover"><li className={isActive("/discover") ? "active" : ""}>DISCOVER<hr/></li></Link>
       </ul>
 
       <form className="search-bar" onSubmit={handleSearch}>
@@ -118,71 +152,93 @@ const [showPassword, setShowPassword] = useState(false);
           />
 
           {profileDropdown && (
-            <div className="profile-dropdown">
+             <div className={`profile-dropdown ${user ? "logged-in" : ""}`}>
               <img className="dropdown-logo" src={logo} alt="" />
-              <h3 className="dropdown-title">Sign In</h3>
-              <form onSubmit={handleLogin}>
-                <input
-                  id="login-email"
-                  type="email"
-                  placeholder="Email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                />
-              <div className="password-wrapper-nav">
-  <input
-    id="login-password"
-    type={showPassword ? "text" : "password"}
-    placeholder="Password"
-    value={password}
-    onChange={(e) => setPassword(e.target.value)}
-    required
-    // The "top: 10px" style is now handled by the CSS class
-  />
-  <div
-    className="password-toggle-nav"
-    style={{ backgroundImage: `url(${showPassword ? passwordHide : passwordShow})` }}
-    onClick={() => setShowPassword(!showPassword)}
-    role="button"
-    tabIndex={0}
-    onKeyDown={(e) => { if (e.key === 'Enter') setShowPassword(!showPassword) }}
-  />
-</div>
 
-                <div className="remember-me">
-                  <input
-                    type="checkbox"
-                    id="rememberMe"
-                    checked={rememberMe}
-                    onChange={(e) => setRememberMe(e.target.checked)}
-                  />
-                  <label id="text-checkbox" htmlFor="rememberMe">Remember Me</label>
-                </div>
+              {/* NEW: conditional rendering based on login */}
+              {user ? (
+                <>
+                  <p>Welcome, {user.name}!</p>
+                  
+                  
+                  <Link to="/account">
+                  <img id="logged-profile" src={profileIcon} alt="user"/>
+                My Account</Link>
 
-                <button id="sub-login" type="submit">Login</button>
-              </form>
+                  <Link id="order-text" to="/orders">
+                  <img id="logged-orders" src={order} alt="Orders"/>Orders & Returns</Link>
 
-              <div className="divider">
-                <hr />
-                <span>OR</span>
-                <hr />
-              </div>
+                  <Link to="/track">
+                  <img id="logged-track" src={trackOrder} alt="track"/>
+                  Track Order</Link>
+                  <button onClick={handleLogout}>Logout</button>
+                </>
+              ) : (
+                <>
+                  <h3 className="dropdown-title">Sign In</h3>
+                  <form onSubmit={handleLogin}>
+                    <input
+                      id="login-email"
+                      type="email"
+                      placeholder="Email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      required
+                    />
+                    <div className="password-wrapper-nav">
+                      <input
+                        id="login-password"
+                        type={showPassword ? "text" : "password"}
+                        placeholder="Password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        required
+                      />
+                      <div
+                        className="password-toggle-nav"
+                        style={{ backgroundImage: `url(${showPassword ? passwordHide : passwordShow})` }}
+                        onClick={() => setShowPassword(!showPassword)}
+                        role="button"
+                        tabIndex={0}
+                        onKeyDown={(e) => { if (e.key === 'Enter') setShowPassword(!showPassword) }}
+                      />
+                    </div>
 
-              <div className="google-sign-in-up">
-                <img src={googleIcon} alt="" />
-              </div>
-              <div className="google-text"><p>Google</p></div>
-              <div className="facebook-logo">
-                <img src={facebookIcon} alt="" />
-              </div>
-              <p className="facebook-text">Facebook</p>
-              <div className="create-account-link">
-                <Link to="/create-account">Create an Account</Link>
-              </div>
-              <div className="forget-password">
-                <Link to="/forget-password">Forget Password?</Link>
-              </div>
+                    <div className="remember-me">
+                      <input
+                        type="checkbox"
+                        id="rememberMe"
+                        checked={rememberMe}
+                        onChange={(e) => setRememberMe(e.target.checked)}
+                      />
+                      <label id="text-checkbox" htmlFor="rememberMe">Remember Me</label>
+                    </div>
+
+                    <button id="sub-login" type="submit">Login</button>
+                  </form>
+
+                  <div className="divider">
+                    <hr />
+                    <span>OR</span>
+                    <hr />
+                  </div>
+
+                  <div className="google-sign-in-up">
+                    <img src={googleIcon} alt="" />
+                  </div>
+                  <div className="google-text"><p>Google</p></div>
+                  <div className="facebook-logo">
+                    <img src={facebookIcon} alt="" />
+                  </div>
+                  <p className="facebook-text">Facebook</p>
+                  <div className="create-account-link">
+                    <Link to="/create-account">Create an Account</Link>
+                  </div>
+                  <div className="forget-password">
+                    <Link to="/forget-password">Forget Password?</Link>
+                  </div>
+                </>
+              )}
             </div>
           )}
         </div>
