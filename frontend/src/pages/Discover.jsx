@@ -1,10 +1,10 @@
 import React from "react";
-import { useNavigate } from "react-router-dom"; // ✅ Import pour la navigation
+import { useNavigate } from "react-router-dom"; //
 import Footer from "../components/footer";
 import "./Discover.css";
 
 const Discover = () => {
-  const navigate = useNavigate(); // ✅ Hook pour naviguer vers une autre page
+  const navigate = useNavigate(); //
 
   return (
     <div className="discover-page">
@@ -23,10 +23,10 @@ const Discover = () => {
         <h2>Shop by Category</h2>
         <div className="category-grid">
 
-          {/* MEN */}
+          {}
           <div
             className="category-card"
-            onClick={() => navigate("/men")} // ✅ redirection vers Men.jsx
+            onClick={() => navigate("/men")} 
             style={{ cursor: "pointer" }}
           >
             <img
@@ -36,10 +36,10 @@ const Discover = () => {
             <div className="overlay"><span>Men</span></div>
           </div>
 
-          {/* WOMEN */}
+          {}
           <div
             className="category-card"
-            onClick={() => navigate("/women")} // ✅ redirection vers Women.jsx
+            onClick={() => navigate("/women")} 
             style={{ cursor: "pointer" }}
           >
             <img
@@ -49,10 +49,10 @@ const Discover = () => {
             <div className="overlay"><span>Women</span></div>
           </div>
 
-          {/* KIDS */}
+          {}
           <div
             className="category-card"
-            onClick={() => navigate("/kids")} // ✅ redirection vers Kids.jsx
+            onClick={() => navigate("/kids")} 
             style={{ cursor: "pointer" }}
           >
             <img
@@ -65,7 +65,7 @@ const Discover = () => {
         </div>
       </section>
 
-      {/* --- BEST SELLERS SECTION --- */}
+      {}
       <section className="bestseller-section">
         <h2>Best Sellers</h2>
         <div className="product-grid">
@@ -101,7 +101,7 @@ const Discover = () => {
         </div>
       </section>
 
-      {/* --- NEWSLETTER SECTION --- */}
+      {}
       <section className="newsletter-section">
         <h2>Join Our Fashion Community</h2>
         <p>Sign up and get 10% off your first order!</p>
