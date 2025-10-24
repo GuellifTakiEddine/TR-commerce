@@ -6,7 +6,7 @@
   overflow-x: hidden;
 }
 
-/* === HERO SECTION (Option 1) === */
+/* === HERO SECTION === */
 .hero {
   position: relative;
   height: 90vh;
@@ -90,11 +90,12 @@
   overflow: hidden;
   border-radius: 20px;
   cursor: pointer;
-  transition: transform 0.3s;
+  transition: all 0.4s ease;
 }
 
 .category-card:hover {
-  transform: scale(1.05);
+  transform: scale(1.07);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
 }
 
 .category-card img {
@@ -102,20 +103,25 @@
   height: 400px;
   object-fit: cover;
   display: block;
+  transition: transform 0.4s ease;
+}
+
+.category-card:hover img {
+  transform: scale(1.1);
 }
 
 .category-card .overlay {
   position: absolute;
   inset: 0;
-  background: rgba(0,0,0,0.4);
+  background: rgba(0, 0, 0, 0.45);
   display: flex;
   align-items: center;
   justify-content: center;
   color: #fff;
-  font-size: 1.8rem;
-  font-weight: 600;
+  font-size: 1.9rem;
+  font-weight: 700;
   opacity: 0;
-  transition: opacity 0.3s;
+  transition: opacity 0.4s ease;
 }
 
 .category-card:hover .overlay {
@@ -142,15 +148,23 @@
 .product-card {
   background: #fff;
   border-radius: 20px;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
   overflow: hidden;
-  transition: transform 0.3s;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
 }
 
+/* === Effet hover et clic === */
 .product-card:hover {
   transform: scale(1.05);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
 }
 
+.product-card:active {
+  transform: scale(0.95);
+}
+
+/* === Contenu carte produit === */
 .product-card img {
   width: 100%;
   height: 320px;
@@ -246,44 +260,4 @@
   .category-grid, .product-grid {
     grid-template-columns: 1fr;
   }
-  /* === HOVER INTERACTIF SUR LES CARTES === */
-.category-card {
-  position: relative;
-  overflow: hidden;
-  border-radius: 20px;
-  cursor: pointer;
-  transition: all 0.4s ease;
-}
-
-.category-card:hover {
-  transform: scale(1.07);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
-}
-
-.category-card img {
-  transition: transform 0.4s ease;
-}
-
-.category-card:hover img {
-  transform: scale(1.1);
-}
-
-.category-card .overlay {
-  position: absolute;
-  inset: 0;
-  background: rgba(0,0,0,0.45);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #fff;
-  font-size: 1.9rem;
-  font-weight: 700;
-  opacity: 0;
-  transition: opacity 0.4s ease;
-}
-
-.category-card:hover .overlay {
-  opacity: 1;
-}
-
 }
