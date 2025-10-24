@@ -246,4 +246,44 @@
   .category-grid, .product-grid {
     grid-template-columns: 1fr;
   }
+  /* === HOVER INTERACTIF SUR LES CARTES === */
+.category-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.4s ease;
+}
+
+.category-card:hover {
+  transform: scale(1.07);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+}
+
+.category-card img {
+  transition: transform 0.4s ease;
+}
+
+.category-card:hover img {
+  transform: scale(1.1);
+}
+
+.category-card .overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 1.9rem;
+  font-weight: 700;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.category-card:hover .overlay {
+  opacity: 1;
+}
+
 }
