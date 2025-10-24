@@ -25,7 +25,7 @@ const client = new MongoClient(url);
     const users = db.collection("users");
     const products = db.collection("products");
     const test = await products.find({}).toArray();
-console.log("Fetched products at startup:", test);
+
 
     const wishlist = db.collection("wishlist");
 
