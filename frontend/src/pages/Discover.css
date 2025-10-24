@@ -1,0 +1,249 @@
+/* === PAGE GLOBALE === */
+.discover-page {
+  background-color: #fff;
+  color: #333;
+  font-family: 'Poppins', sans-serif;
+  overflow-x: hidden;
+}
+
+/* === HERO SECTION (Option 1) === */
+.hero {
+  position: relative;
+  height: 90vh;
+  background-image: url("https://static.e-stradivarius.net/assets/public/1b5a/a728/51294194a042/1bb3bf97ebb4/2400_NewIn_v1/2400_NewIn_v1.jpg?ts=1760949241987&w=1901.25&f=auto");
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+}
+
+.hero-content {
+  position: relative;
+  color: #fff;
+  z-index: 2;
+  animation: fadeIn 1.5s ease-in-out;
+}
+
+.hero-content h1 {
+  font-size: 3.5rem;
+  margin-bottom: 1rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.hero-content p {
+  font-size: 1.3rem;
+  margin-bottom: 1.8rem;
+}
+
+.hero-content button {
+  background-color: #fff;
+  color: #000;
+  border: none;
+  padding: 12px 36px;
+  border-radius: 30px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.hero-content button:hover {
+  background-color: #f0f0f0;
+  transform: scale(1.05);
+}
+
+/* Animation d’apparition */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* === CATEGORY SECTION === */
+.category-section {
+  padding: 80px 40px;
+  text-align: center;
+  background-color: #fafafa;
+}
+
+.category-section h2 {
+  font-size: 2.3rem;
+  margin-bottom: 40px;
+}
+
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 25px;
+}
+
+.category-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: transform 0.3s;
+}
+
+.category-card:hover {
+  transform: scale(1.05);
+}
+
+.category-card img {
+  width: 100%;
+  height: 400px;
+  object-fit: cover;
+  display: block;
+}
+
+.category-card .overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 1.8rem;
+  font-weight: 600;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.category-card:hover .overlay {
+  opacity: 1;
+}
+
+/* === BEST SELLERS SECTION === */
+.bestseller-section {
+  padding: 80px 40px;
+  text-align: center;
+}
+
+.bestseller-section h2 {
+  font-size: 2.3rem;
+  margin-bottom: 40px;
+}
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 25px;
+}
+
+.product-card {
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  overflow: hidden;
+  transition: transform 0.3s;
+}
+
+.product-card:hover {
+  transform: scale(1.05);
+}
+
+.product-card img {
+  width: 100%;
+  height: 320px;
+  object-fit: cover;
+}
+
+.product-card h3 {
+  margin: 15px 0 5px;
+  font-size: 1.2rem;
+}
+
+.product-card p {
+  margin-bottom: 10px;
+  font-weight: bold;
+  color: #666;
+}
+
+.product-card button {
+  background-color: #000;
+  color: #fff;
+  border: none;
+  padding: 10px 25px;
+  border-radius: 25px;
+  margin-bottom: 20px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.product-card button:hover {
+  background-color: #444;
+}
+
+/* === NEWSLETTER SECTION === */
+.newsletter-section {
+  background-color: #000;
+  color: #fff;
+  text-align: center;
+  padding: 80px 40px;
+}
+
+.newsletter-section h2 {
+  font-size: 2rem;
+  margin-bottom: 15px;
+}
+
+.newsletter-section p {
+  font-size: 1.1rem;
+  margin-bottom: 30px;
+  color: #ddd;
+}
+
+.newsletter-form {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.newsletter-form input {
+  padding: 12px 18px;
+  border-radius: 30px;
+  border: none;
+  outline: none;
+  width: 250px;
+}
+
+.newsletter-form button {
+  background-color: #fff;
+  color: #000;
+  border: none;
+  padding: 12px 30px;
+  border-radius: 30px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.newsletter-form button:hover {
+  background-color: #ddd;
+  transform: scale(1.05);
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 768px) {
+  .hero-content h1 {
+    font-size: 2.2rem;
+  }
+
+  .hero-content p {
+    font-size: 1rem;
+  }
+
+  .category-grid, .product-grid {
+    grid-template-columns: 1fr;
+  }
+}
