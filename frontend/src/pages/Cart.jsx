@@ -30,6 +30,7 @@ const Cart = () => {
   const [discount, setDiscount] = useState(0);
   const [selectedWilaya, setSelectedWilaya] = useState("");
   const [shipping, setShipping] = useState(0);
+  const [favorites, setFavorites] = useState([]);
 
   const wilayas = [
     "Adrar", "Chlef", "Laghouat", "Oum El Bouaghi", "Batna", "Béjaïa", "Biskra", "Béchar",
@@ -54,6 +55,14 @@ const Cart = () => {
 
   const handleRemoveItem = (id) => {
     setCartItems((prev) => prev.filter((item) => item.id !== id));
+  };
+
+  const toggleFavorite = (id) => {
+    setFavorites(prev => 
+      prev.includes(id) 
+        ? prev.filter(itemId => itemId !== id)
+        : [...prev, id]
+    );
   };
 
   const subtotal = cartItems.reduce(
@@ -87,57 +96,104 @@ const Cart = () => {
   return (
     <div className="cart-container">
       <div className="cart-page">
-        <h1 className="cart-title">My Shopping Cart</h1>
+        <h1 className="cart-title">SHOPPING BAG</h1>
 
         <div className="cart-layout">
-          <div className="cart-items">
-            {cartItems.map((item) => (
-              <div key={item.id} className="cart-item-line">
-                <img src={item.image} alt={item.name} className="cart-item-image" />
+          <div className="cart-items-section">
+            <div className="cart-header">
+              <span className="header-product">PRODUCT</span>
+              <span className="header-quantity">QUANTITY</span>
+              <span className="header-total">TOTAL</span>
+            </div>
+            
+            <div className="cart-items">
+              {cartItems.map((item) => (
+                <div key={item.id} className="cart-item-modern">
+                  <div className="item-main-info">
+                    <img src={item.image} alt={item.name} className="cart-item-image" />
+                    <div className="item-details">
+                      <h3 className="item-name">{item.name}</h3>
+                      <p className="item-attributes">
+                        Size: <strong>{item.size}</strong> | Color: <strong>{item.color}</strong>
+                      </p>
+                      <p className="item-unit-price">{item.price.toLocaleString()} DA</p>
+                    </div>
+                  </div>
 
-                <div className="cart-item-details">
-                  <h3>{item.name}</h3>
-                  <p className="item-subinfo">
-                    Taille {item.size} | {item.color}
-                  </p>
-                  <p className="item-price">{item.price.toLocaleString()} DZD</p>
+                  <div className="item-quantity-section">
+                    <div className="quantity-selector">
+                      <button 
+                        className="quantity-btn"
+                        onClick={() => handleQuantityChange(item.id, -1)}
+                      >
+                        -
+                      </button>
+                      <span className="quantity-value">{item.quantity}</span>
+                      <button 
+                        className="quantity-btn"
+                        onClick={() => handleQuantityChange(item.id, 1)}
+                      >
+                        +
+                      </button>
+                    </div>
+                  </div>
 
-                  <div className="item-quantity">
-                    <button onClick={() => handleQuantityChange(item.id, -1)}>−</button>
-                    <span>{item.quantity}</span>
-                    <button onClick={() => handleQuantityChange(item.id, 1)}>+</button>
+                  <div className="item-total-section">
+                    <span className="item-total-price">
+                      {(item.price * item.quantity).toLocaleString()} DA
+                    </span>
+                    <div className="action-buttons">
+                      <button 
+                        className={`action-btn favorite-btn ${favorites.includes(item.id) ? 'favorited' : ''}`}
+                        onClick={() => toggleFavorite(item.id)}
+                      >
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill={favorites.includes(item.id) ? "currentColor" : "none"} stroke="currentColor" strokeWidth="1.5">
+                          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                        </svg>
+                      </button>
+                      <button 
+                        className="action-btn delete-btn"
+                        onClick={() => handleRemoveItem(item.id)}
+                      >
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                          <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                        </svg>
+                      </button>
+                    </div>
                   </div>
                 </div>
-
-                <div className="cart-item-icons">
-                  <span className="icon-heart">♥</span>
-                  <span
-                    className="icon-trash"
-                    onClick={() => handleRemoveItem(item.id)}
-                  >
-                    🗑️
-                  </span>
-                </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
 
-          <div className="cart-summary">
-            <h2>Order Summary</h2>
-            <p>Subtotal: <strong>{subtotal.toLocaleString()} DA</strong></p>
-            <p>Shipping: <strong>{shipping.toLocaleString()} DA</strong></p>
+          <div className="cart-summary-modern">
+            <h2 className="summary-title">ORDER SUMMARY</h2>
+            
+            <div className="summary-line">
+              <span>Subtotal</span>
+              <span>{subtotal.toLocaleString()} DA</span>
+            </div>
+            
+            <div className="summary-line">
+              <span>Shipping</span>
+              <span>{shipping.toLocaleString()} DA</span>
+            </div>
+            
             {discount > 0 && (
-              <p className="discount">Discount: -{discount.toLocaleString()} DA</p>
+              <div className="summary-line discount-line">
+                <span>Discount</span>
+                <span>-{discount.toLocaleString()} DA</span>
+              </div>
             )}
 
-            <div className="wilaya-section">
-              <h4>Delivery Wilaya</h4>
+            <div className="wilaya-section-modern">
+              <label>DELIVERY WILAYA</label>
               <select
                 value={selectedWilaya}
                 onChange={handleWilayaChange}
-                className="wilaya-select"
+                className="wilaya-select-modern"
               >
-                <option value=""> Select your Wilaya </option>
+                <option value="">Select your Wilaya</option>
                 {wilayas.map((wilaya, index) => (
                   <option key={index} value={wilaya}>
                     {wilaya}
@@ -146,21 +202,30 @@ const Cart = () => {
               </select>
             </div>
 
-            <div className="promo-section">
+            <div className="promo-section-modern">
               <input
                 type="text"
-                placeholder="Enter promo code"
+                placeholder="PROMO CODE"
                 value={promoCode}
                 onChange={(e) => setPromoCode(e.target.value)}
+                className="promo-input"
               />
-              <button onClick={applyPromo}>Apply</button>
+              <button onClick={applyPromo} className="promo-apply-btn">APPLY</button>
             </div>
 
-            <hr />
-            <p className="total">
-              Total: <strong>{total.toLocaleString()} DA</strong>
-            </p>
-            <button className="checkout-btn">Proceed to Checkout</button>
+            <div className="summary-total">
+              <span>TOTAL</span>
+              <span>{total.toLocaleString()} DA</span>
+            </div>
+            
+            <button className="checkout-btn-modern">PROCEED TO CHECKOUT</button>
+            
+            <div className="secure-payment">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              </svg>
+              <span>Secure payment</span>
+            </div>
           </div>
         </div>
       </div>
