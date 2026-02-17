@@ -13,7 +13,9 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser());
 
-const url = "mongodb://takiguellif12:takiranim@ac-cvhld6x-shard-00-00.6iskzez.mongodb.net:27017,ac-cvhld6x-shard-00-01.6iskzez.mongodb.net:27017,ac-cvhld6x-shard-00-02.6iskzez.mongodb.net:27017/TR?ssl=true&replicaSet=atlas-pgklbr-shard-0&authSource=admin&retryWrites=true&w=majority";
+
+const url = "mongodb+srv://takiguellif12:takiranim@trcommerce.6iskzez.mongodb.net/TR?retryWrites=true&w=majority";
+
 const client = new MongoClient(url);
 
 (async () => {
