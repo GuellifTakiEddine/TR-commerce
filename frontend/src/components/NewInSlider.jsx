@@ -1,108 +1,117 @@
-import React, { useEffect, useRef, useState } from 'react';
-import './NewInSlider.css';
+import React, { useState, useEffect, useCallback } from "react";
+import "./NewInSlider.css";
 
-import NewIn1 from './images/2400NewIn.webp';
-import NewIn2 from './images/2400CasualSport.webp';
+import NewIn1 from "./images/home.png";
+import NewIn2 from "./images/image.png";
 
-const NewInSlider = () => {
-  const sliderRef = useRef(null);
-  const [currentIndex, setCurrentIndex] = useState(0);
+const slides = [
+  {
+    image: NewIn1,
+    title: "NEW COLLECTION IN ",
+    subtitle: "Discover the latest trends",
+    ctaText: "DESCOVER",
+    ctaLink: "/discover",
+  },
+  {
+    image: NewIn2,
+    title: "CLASSY FITS",
+    subtitle: "Trendy of this Winter",
+    ctaText: "EXPLORE",
+    ctaLink: "/discover",
+  },
+];
+
+export default function NewInSlider() {
+  const [index, setIndex] = useState(0);
+  const [hovered, setHovered] = useState(false);
   const [progress, setProgress] = useState(0);
-  const [isLight, setIsLight] = useState(false); 
 
-  const images = [NewIn1, NewIn2]; 
-  const getImageBrightness = (src) => {
-    const img = new Image();
-    img.src = src;
-    img.onload = () => {
-      const canvas = document.createElement('canvas');
-      const ctx = canvas.getContext('2d');
-      canvas.width = img.width;
-      canvas.height = img.height;
-      ctx.drawImage(img, 0, 0);
-      
-      const pixels = ctx.getImageData(0, 0, canvas.width, canvas.height);
-      const data = pixels.data;
-      let r = 0, g = 0, b = 0;
+  const goNext = useCallback(() => {
+    setIndex((i) => (i + 1) % slides.length);
+    setProgress(0);
+  }, []);
 
-      for (let i = 0; i < data.length; i += 4) {
-        r += data[i];
-        g += data[i + 1];
-        b += data[i + 2];
-      }
-
-      const pixelCount = data.length / 4;
-      r = r / pixelCount;
-      g = g / pixelCount;
-      b = b / pixelCount;
-
-      const brightness = 0.2126 * r + 0.7152 * g + 0.0722 * b;
-      
-      setIsLight(brightness > 128); 
-    };
+  const goPrev = () => {
+    setIndex((i) => (i === 0 ? slides.length - 1 : i - 1));
+    setProgress(0);
   };
 
   useEffect(() => {
-    getImageBrightness(images[currentIndex]);
+    if (hovered) return;
 
-    const interval = setInterval(() => {
-      setCurrentIndex((prevIndex) => (prevIndex === images.length - 1 ? 0 : prevIndex + 1));
-      setProgress(0); 
-    }, 6000); 
-
-    const progressInterval = setInterval(() => {
-      setProgress((prevProgress) => {
-        return prevProgress === 100 ? 0 : prevProgress + 25; 
-      });
+    const autoSlide = setInterval(goNext, 6000);
+    const prog = setInterval(() => {
+      setProgress((p) => (p >= 100 ? 0 : p + 20));
     }, 1000);
 
     return () => {
-      clearInterval(interval);
-      clearInterval(progressInterval);
+      clearInterval(autoSlide);
+      clearInterval(prog);
     };
-  }, [images.length, currentIndex]);
-
-  // Fonction pour naviguer à gauche
-  const goToPrevious = () => {
-    setCurrentIndex(currentIndex === 0 ? images.length - 1 : currentIndex - 1);
-    setProgress(0); // Réinitialiser la barre de progression quand on clique sur la flèche gauche
-    getImageBrightness(images[currentIndex]);
-  };
-
-  // Fonction pour naviguer à droite
-  const goToNext = () => {
-    setCurrentIndex(currentIndex === images.length - 1 ? 0 : currentIndex + 1);
-    setProgress(0); // Réinitialiser la barre de progression quand on clique sur la flèche droite
-    getImageBrightness(images[currentIndex]);
-  };
+  }, [goNext, hovered]);
 
   return (
-    <div className="newin-wrapper">
-      <div className="newin-slider-horizontal" ref={sliderRef}>
-        {/* Conteneur image + label */}
-        <div className="image-container">
-          <img 
-            src={images[currentIndex]} 
-            alt={`New In ${currentIndex + 1}`} 
-            className="newin-slide-horizontal"
+    <div
+      className="home-slider"
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+    >
+      {/* Dots Zara top-right */}
+      <div className="dots">
+        {slides.map((_, i) => (
+          <button
+            key={i}
+            onClick={() => setIndex(i)}
+            className={`dot ${i === index ? "active" : ""}`}
           />
-          <div 
-            className={`newin-label-inside ${isLight ? 'light' : 'dark'}`}>NEW IN</div>
+        ))}
+      </div>
+
+      {/* Image */}
+      <div className="slide">
+        <img src={slides[index].image} alt="" className="bg" />
+        <div className="overlay" />
+      </div>
+
+      {/* Content */}
+      <div className="text-block">
+        <h1>{slides[index].title}</h1>
+        <p>{slides[index].subtitle}</p>
+        <a href={slides[index].ctaLink} className="cta">
+          {slides[index].ctaText}
+          <span className="arrow">→</span>
+        </a>
+      </div>
+
+      {/* NEW — Clean Minimal Arrows */}
+      <div className="slider-arrows">
+        <button className="arrow-left" onClick={goPrev}>←</button>
+        <button className="arrow-right" onClick={goNext}>→</button>
+      </div>
+
+      {/* Progress */}
+      <div className="bottom-bar">
+        <div className="progress">
+          <div className="fill" style={{ width: `${progress}%` }} />
+        </div>
+
+        <div className="numbers">
+          <span>0{index + 1}</span>/<span>0{slides.length}</span>
         </div>
       </div>
 
-      {/* Flèches sous les images */}
-      <div className="slider-arrows">
-        <button onClick={goToPrevious} className="arrow-left">←</button>
-        <button onClick={goToNext} className="arrow-right">→</button>
-      </div>
-
-      {/* Barre de progression sous les images */}
-      <div className="progress-bar-wrapper">
-        <div className="progress-bar" style={{ width: `${progress}%` }}></div>
+      {/* Text Nav */}
+      <div className="text-nav">
+        {slides.map((s, i) => (
+          <button
+            key={i}
+            className={`nav-item ${i === index ? "active" : ""}`}
+            onClick={() => setIndex(i)}
+          >
+            <span>0{i + 1}</span> {s.title.split(" ")[0]}
+          </button>
+        ))}
       </div>
     </div>
   );
-};
-
-export default NewInSlider;
+}
