@@ -87,7 +87,7 @@ const Kids = () => {
           filteredProducts.map((prod, i) => (
             <Product
   key={prod._id}
-  _id={prod._id}   // ✅ THIS IS THE FIX
+  _id={prod._id}   
   title={prod.name}
   brand={prod.brand}
   price={prod.price}
