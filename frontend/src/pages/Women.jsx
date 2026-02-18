@@ -13,7 +13,7 @@ const Womens = () => {
       .then((res) => res.json())
       .then((data) => {
         console.log("Fetched products:", data);
-        const womenProducts = data.filter((p) => p.gender === "Women");
+        const womenProducts = data.filter((p) => p.category === "Women");
         setProducts(womenProducts);
         setLoading(false);
       })
@@ -85,16 +85,18 @@ const Womens = () => {
           <div>No products found.</div>
         ) : (
           filteredProducts.map((prod, i) => (
-            <Product
-              key={prod._id || i}
-              title={prod.name}
-              brand={prod.brand}
-              price={prod.price}
-              colors={prod.colors}
-              images={[
-                prod.photos || prod["photos "] || "https://via.placeholder.com/300",
-              ]}
-            />
+         <Product
+  key={prod._id}
+  _id={prod._id}   // ✅ THIS IS THE FIX
+  title={prod.name}
+  brand={prod.brand}
+  price={prod.price}
+  colors={prod.colors}
+  images={[
+    prod.photos || prod["photos "] || "https://via.placeholder.com/300",
+  ]}
+/>
+
           ))
         )}
       </div>

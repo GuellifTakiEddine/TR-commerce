@@ -65,7 +65,7 @@ const Navbar = () => {
       alert(data.error);
     } else {
       console.log("Login successful:", data);
-
+      navigate("/");
       setUser(data.user);
 
       if (rememberMe) {

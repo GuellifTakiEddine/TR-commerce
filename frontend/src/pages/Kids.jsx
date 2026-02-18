@@ -13,7 +13,7 @@ const Kids = () => {
       .then((res) => res.json())
       .then((data) => {
         console.log("Fetched products:", data);
-        const kidsProducts = data.filter((p) => p.gender === "Kids");
+        const kidsProducts = data.filter((p) => p.category === "Kids");
         setProducts(kidsProducts);
         setLoading(false);
       })
@@ -86,15 +86,16 @@ const Kids = () => {
         ) : (
           filteredProducts.map((prod, i) => (
             <Product
-              key={prod._id || i}
-              title={prod.name}
-              brand={prod.brand}
-              price={prod.price}
-              colors={prod.colors}
-              images={[
-                prod.photos || prod["photos "] || "https://via.placeholder.com/300",
-              ]}
-            />
+  key={prod._id}
+  _id={prod._id}   // ✅ THIS IS THE FIX
+  title={prod.name}
+  brand={prod.brand}
+  price={prod.price}
+  colors={prod.colors}
+  images={[
+    prod.photos || prod["photos "] || "https://via.placeholder.com/300",
+  ]}
+/>
           ))
         )}
       </div>

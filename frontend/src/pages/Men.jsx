@@ -83,13 +83,16 @@ const Mens = () => {
         ) : (
           filteredProducts.map((prod, i) => (
             <Product
-              key={prod._id || i}
-              title={prod.name}
-              brand={prod.brand}
-              price={prod.price}
-              colors={prod.colors}
-              images={[prod.photos || prod["photos "] || "https://via.placeholder.com/300"]}
-            />
+  key={prod._id}
+  _id={prod._id}   // ✅ THIS IS THE FIX
+  title={prod.name}
+  brand={prod.brand}
+  price={prod.price}
+  colors={prod.colors}
+  images={[
+    prod.photos || prod["photos "] || "https://via.placeholder.com/300",
+  ]}
+/>
           ))
         )}
       </div>
