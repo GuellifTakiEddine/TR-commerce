@@ -23,7 +23,6 @@ const SearchPage = () => {
 
   return (
     <div style={{ padding: "40px" }}>
-      <h2>Search results for: "{query}"</h2>
 
       {results.length === 0 ? (
         <p>No products found.</p>
