@@ -28,22 +28,26 @@ const SearchPage = () => {
       {results.length === 0 ? (
         <p>No products found.</p>
       ) : (
-        results.map(prod => (
-          results.map(prod => (
-<Product
-  key={prod._id}
-  _id={prod._id}  
-  title={prod.name}
-  brand={prod.brand}
-  price={prod.price}
-  colors={prod.colors}
-  images={[
-    prod.photos || prod["photos "] || "https://via.placeholder.com/300",
-  ]}
-/>
-))
-
-        ))
+        <div style={{
+          display: "flex",
+          flexWrap: "wrap",
+          gap: "30px",
+          marginTop: "40px"
+        }}>
+          {results.map(prod => (
+            <Product
+              key={prod._id}
+              _id={prod._id}
+              title={prod.name}
+              brand={prod.brand}
+              price={prod.price}
+              colors={prod.colors}
+              images={[
+                prod.photos || prod["photos "] || "https://via.placeholder.com/300",
+              ]}
+            />
+          ))}
+        </div>
       )}
     </div>
   );
