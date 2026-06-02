@@ -114,4 +114,18 @@
   color: #555;
 }
 
+.add-to-cart-btn {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  background: black;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-size: 12px;
+  letter-spacing: 1px;
+}
 
+.add-to-cart-btn:hover {
+  background: #333;
+}
