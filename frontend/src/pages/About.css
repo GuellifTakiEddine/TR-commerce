@@ -1,0 +1,48 @@
+.about-wrapper {
+  width: 100%;
+  min-height: 100vh;
+  background: #fff;
+  font-family: Arial, sans-serif;
+  color: #111;
+}
+
+.about-hero {
+  padding: 120px 60px 70px;
+  border-bottom: 1px solid #eee;
+}
+
+.about-hero h1 {
+  font-size: 52px;
+  font-weight: 300;
+  letter-spacing: 8px;
+  margin-bottom: 20px;
+}
+
+.about-hero p {
+  font-size: 15px;
+  color: #666;
+  max-width: 500px;
+  line-height: 1.8;
+}
+
+.about-content {
+  max-width: 950px;
+  margin: auto;
+  padding: 80px 40px;
+}
+
+.about-section {
+  margin-bottom: 70px;
+}
+
+.about-section h2 {
+  font-size: 14px;
+  letter-spacing: 2px;
+  margin-bottom: 25px;
+}
+
+.about-section p {
+  font-size: 15px;
+  line-height: 2;
+  color: #444;
+}
