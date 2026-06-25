@@ -171,7 +171,20 @@ const handleCheckout = async () => {
       setShipping(600);
     else setShipping(900);
   };
+const getProductImage = (product) => {
+  if (!product?.photos)
+    return "https://via.placeholder.com/400";
 
+  if (Array.isArray(product.photos))
+    return product.photos[0];
+
+  try {
+    const parsed = JSON.parse(product.photos);
+    return Array.isArray(parsed) ? parsed[0] : product.photos;
+  } catch {
+    return product.photos;
+  }
+};
   return (
     <div className="cart-page-modern">
 
@@ -204,13 +217,10 @@ const handleCheckout = async () => {
                 {/* IMAGE */}
                 <div className="cart-image-wrapper">
                   <img
-                    src={
-                      item.product?.photos ||
-                      "https://via.placeholder.com/400"
-                    }
-                    alt=""
-                    className="cart-product-image"
-                  />
+  src={getProductImage(item.product)}
+  alt={item.product?.name}
+  className="cart-product-image"
+/>
                 </div>
 
                 {/* INFO */}

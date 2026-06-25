@@ -33,7 +33,15 @@ const ProductsList = () => {
 
     fetchProducts();
   }, []);
+console.log("PHOTOS RAW:", product.photos);
+console.log("PHOTOS TYPE:", typeof product.photos);
 
+const parsedImages =
+  typeof product.photos === "string"
+    ? JSON.parse(product.photos)
+    : product.photos;
+
+console.log("PARSED:", parsedImages);
   return (
     <div className="products-list">
       {products.length === 0 ? (
@@ -49,7 +57,7 @@ const ProductsList = () => {
               brand={product.brand}
               price={product.price}
               colors={product.colors || 1}
-              images={Array.isArray(product.photos) ? product.photos : [product.photos]}
+               images={parsedImages}
             />
           );
         })

@@ -2,13 +2,44 @@ import React, { useState, useEffect } from "react";
 import wishIcon from "./images/wishlist.svg";
 import wishIconFilled from "./images/wishlist-filled.svg";
 import "./product.css";
+import { useNavigate } from "react-router-dom";
 
 const Product = ({ _id, title, brand, price, colors, images }) => {
   const [isWished, setIsWished] = useState(false);
   const [user, setUser] = useState(null);
   const [loadingCart, setLoadingCart] = useState(false);
 
-  // 🔹 Load user
+  const navigate = useNavigate();
+
+  const goToDetails = () => {
+    navigate(`/product/${_id}`);
+  };
+
+  // FIX IMAGES
+  let imageUrl = "https://via.placeholder.com/300";
+
+  try {
+    let fixedImages = images;
+
+    if (typeof fixedImages === "string") {
+      fixedImages = JSON.parse(fixedImages);
+    }
+
+    if (
+      Array.isArray(fixedImages) &&
+      typeof fixedImages[0] === "string" &&
+      fixedImages[0].startsWith("[")
+    ) {
+      fixedImages = JSON.parse(fixedImages[0]);
+    }
+
+    if (Array.isArray(fixedImages) && fixedImages.length > 0) {
+      imageUrl = fixedImages[0];
+    }
+  } catch (err) {
+    console.error("Image parse error:", err);
+  }
+
   useEffect(() => {
     const storedUser =
       localStorage.getItem("user") ||
@@ -19,7 +50,6 @@ const Product = ({ _id, title, brand, price, colors, images }) => {
     }
   }, []);
 
-  // 🔹 Wishlist check
   useEffect(() => {
     if (!user?._id || !_id) return;
 
@@ -28,9 +58,13 @@ const Product = ({ _id, title, brand, price, colors, images }) => {
         const res = await fetch(
           `http://localhost:5000/wishlist/${user._id}`
         );
+
         const data = await res.json();
 
-        const exists = data.some((p) => p._id === _id);
+        const exists = data.some(
+          (p) => p._id === _id
+        );
+
         setIsWished(exists);
       } catch (err) {
         console.error(err);
@@ -40,113 +74,108 @@ const Product = ({ _id, title, brand, price, colors, images }) => {
     fetchWishlist();
   }, [user, _id]);
 
-  // ❤️ WISHLIST TOGGLE
-  const toggleWishlist = async () => {
-    if (!user?._id) return alert("Login first");
+  const toggleWishlist = async (e) => {
+    e.stopPropagation();
 
-    if (isWished) {
-      await fetch(
-        `http://localhost:5000/wishlist/${user._id}/${_id}`,
-        { method: "DELETE" }
-      );
-      setIsWished(false);
-    } else {
-      await fetch("http://localhost:5000/wishlist", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          userId: user._id,
-          productId: _id,
-        }),
-      });
-      setIsWished(true);
+    if (!user?._id) {
+      alert("Login first");
+      return;
+    }
+
+    try {
+      if (isWished) {
+        await fetch(
+          `http://localhost:5000/wishlist/${user._id}/${_id}`,
+          {
+            method: "DELETE",
+          }
+        );
+
+        setIsWished(false);
+      } else {
+        await fetch(
+          "http://localhost:5000/wishlist",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type":
+                "application/json",
+            },
+            body: JSON.stringify({
+              userId: user._id,
+              productId: _id,
+            }),
+          }
+        );
+
+        setIsWished(true);
+      }
+    } catch (err) {
+      console.error(err);
     }
   };
 
-const addToCart = async () => {
-  if (!user?._id) {
-    alert("Please login first");
-    return;
-  }
+  const addToCart = (e) => {
+  e.stopPropagation();
 
-  if (!_id) {
-    alert("Product missing");
-    return;
-  }
-
-  try {
-    const res = await fetch("http://localhost:5000/cart", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        userId: user._id,
-        productId: _id,
-        quantity: 1,
-        size: "M",
-        color: "default",
-      }),
-    });
-
-    const data = await res.json();
-
-    console.log("CART RESPONSE:", data);
-
-    if (!res.ok) {
-      throw new Error(data.error || "Cart failed");
-    }
-
-    alert("Added to cart 🛒");
-  } catch (err) {
-    console.error("ADD CART ERROR:", err);
-    alert("Failed to add to cart");
-    } finally {
-      setLoadingCart(false);
-    }
-  };
-
+  navigate(`/product/${_id}`);
+};
   return (
-    <div className="product">
-
-      {/* IMAGE */}
+    <div
+      className="product"
+      onClick={goToDetails}
+      style={{ cursor: "pointer" }}
+    >
       <div className="product-image-wrapper">
         <img
           className="product-image"
-          src={images?.[0] || "https://via.placeholder.com/300"}
+          src={imageUrl}
           alt={title}
+          onError={(e) => {
+            e.target.src =
+              "https://via.placeholder.com/300";
+          }}
         />
 
-        {/* WISHLIST */}
         <img
           className="fav-icon"
-          src={isWished ? wishIconFilled : wishIcon}
+          src={
+            isWished
+              ? wishIconFilled
+              : wishIcon
+          }
           alt="wishlist"
           onClick={toggleWishlist}
         />
       </div>
 
-      {/* INFO */}
-      <div className="product-title">{title}</div>
-      <div className="product-brand">{brand}</div>
-      <div className="product-price">${price}</div>
+      <div className="product-title">
+        {title}
+      </div>
+
+      <div className="product-brand">
+        {brand}
+      </div>
+
+      <div className="product-price">
+        {price || 0} DA
+      </div>
+
       <div className="product-colors">
         {colors || 0} colors available
       </div>
 
-      {/* 🛒 ADD TO CART BUTTON */}
       <button
         className="add-to-cart-btn"
         onClick={addToCart}
         disabled={loadingCart}
       >
-        {loadingCart ? "ADDING..." : "ADD TO CART"}
+        {loadingCart
+          ? "ADDING..."
+          : "ADD TO CART"}
       </button>
-
     </div>
-    
   );
 };
-
 
 export default Product;
