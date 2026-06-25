@@ -18,6 +18,7 @@ import PrivacyPolicy from "./pages/PrivacyPolicy";
 import Terms from "./pages/Terms";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
+import Products from './pages/ProductDetails';
 function App() {
   return (
     <div className="App">
@@ -40,7 +41,8 @@ function App() {
           <Route path="/terms" element={<Terms />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
-<Route path="/track/:id" element={<OrderTracking />} />
+          <Route path="/track/:id" element={<OrderTracking />} />
+          <Route path='/product/:id' element={<Products/>}></Route>
         </Routes>
       </BrowserRouter>
     </div>
