@@ -485,7 +485,30 @@ app.get("/products/:id", async (req, res) => {
 });
 
 
+app.put("/cart/:id", async (req, res) => {
+  try {
+    const { quantity } = req.body;
 
+    const updatedItem = await Cart.findByIdAndUpdate(
+      req.params.id,
+      { quantity },
+      { new: true }
+    );
+
+    if (!updatedItem) {
+      return res.status(404).json({
+        error: "Cart item not found",
+      });
+    }
+
+    res.json(updatedItem);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({
+      error: "Server error",
+    });
+  }
+});
 
     // ====================================================
     // SERVER

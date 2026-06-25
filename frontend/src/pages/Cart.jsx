@@ -54,14 +54,17 @@ const Cart = () => {
   // REMOVE
   // =========================================
   const handleRemoveItem = async (id) => {
-    await fetch(`http://localhost:5000/cart/${id}`, {
-      method: "DELETE",
-    });
+  await fetch(`http://localhost:5000/cart/${id}`, {
+    method: "DELETE",
+  });
 
-    setCartItems((prev) =>
-      prev.filter((item) => item._id !== id)
-    );
-  };
+  setCartItems((prev) =>
+    prev.filter((item) => item._id !== id)
+  );
+
+  // Update Navbar counter
+  window.dispatchEvent(new Event("cartUpdated"));
+};
 
   // =========================================
 const handleCheckout = async () => {
@@ -105,26 +108,26 @@ const handleCheckout = async () => {
 
   // UPDATE QTY
   // =========================================
-  const updateQuantity = async (item, newQty) => {
-    if (newQty < 1) return;
+const updateQuantity = async (item, newQty) => {
+  if (newQty < 1) return;
 
-    await fetch(`http://localhost:5000/cart/${item._id}`, {
-      method: "DELETE",
-    });
+  try {
+    const res = await fetch(
+      `http://localhost:5000/cart/${item._id}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          quantity: newQty,
+        }),
+      }
+    );
 
-    await fetch("http://localhost:5000/cart", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        userId: user._id,
-        productId: item.productId,
-        quantity: newQty,
-        size: item.size,
-        color: item.color,
-      }),
-    });
+    if (!res.ok) {
+      throw new Error("Failed to update quantity");
+    }
 
     setCartItems((prev) =>
       prev.map((i) =>
@@ -133,7 +136,12 @@ const handleCheckout = async () => {
           : i
       )
     );
-  };
+
+    window.dispatchEvent(new Event("cartUpdated"));
+  } catch (err) {
+    console.error(err);
+  }
+};
 
   // =========================================
   // CALCULATIONS

@@ -31,7 +31,40 @@ const Navbar = () => {
   const [query, setQuery] = useState(""); // ✅ Search state
   const [showPassword, setShowPassword] = useState(false);
   const [user, setUser] = useState(null);
+const [cartCount, setCartCount] = useState(0);
+const fetchCartCount = async () => {
+  const storedUser =
+    JSON.parse(localStorage.getItem("user")) ||
+    JSON.parse(sessionStorage.getItem("user"));
 
+  if (!storedUser?._id) {
+    setCartCount(0);
+    return;
+  }
+
+  try {
+    const res = await fetch(
+      `http://localhost:5000/cart/${storedUser._id}`
+    );
+
+    const data = await res.json();
+
+    console.log("Cart response:", data);
+
+    if (Array.isArray(data)) {
+      const total = data.reduce(
+        (sum, item) => sum + Number(item.quantity || 0),
+        0
+      );
+
+      setCartCount(total);
+    } else {
+      setCartCount(0);
+    }
+  } catch (err) {
+    console.error(err);
+  }
+};
   // Load user from storage
   useEffect(() => {
     const remember = localStorage.getItem("rememberMe") === "true";
@@ -43,8 +76,20 @@ const Navbar = () => {
       setUser(JSON.parse(storedUser));
       setRememberMe(remember);
     }
+    fetchCartCount();
   }, []);
+useEffect(() => {
+   fetchCartCount();
+  const updateCart = () => fetchCartCount();
 
+  window.addEventListener("cartUpdated", updateCart);
+
+  return () =>
+    window.removeEventListener(
+      "cartUpdated",
+      updateCart
+    );
+}, []);
   // LOGIN
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -58,20 +103,23 @@ const Navbar = () => {
 
       const data = await res.json();
 
-      if (!res.ok) {
-        alert(data.error);
-      } else {
-        navigate("/");
-        setUser(data.user);
+     if (!res.ok) {
+  alert(data.error);
+} else {
+  setUser(data.user);
 
-        if (rememberMe) {
-          localStorage.setItem("user", JSON.stringify(data.user));
-          localStorage.setItem("rememberMe", "true");
-        } else {
-          sessionStorage.setItem("user", JSON.stringify(data.user));
-          localStorage.removeItem("rememberMe");
-        }
-      }
+  if (rememberMe) {
+    localStorage.setItem("user", JSON.stringify(data.user));
+    localStorage.setItem("rememberMe", "true");
+  } else {
+    sessionStorage.setItem("user", JSON.stringify(data.user));
+    localStorage.removeItem("rememberMe");
+  }
+
+  await fetchCartCount();
+
+  navigate("/");
+}
     } catch (err) {
       alert("Server error. Please try again.");
     }
@@ -82,11 +130,13 @@ const Navbar = () => {
 
   // LOGOUT
   const handleLogout = () => {
-    setUser(null);
-    localStorage.removeItem("user");
-    sessionStorage.removeItem("user");
-    localStorage.removeItem("rememberMe");
-  };
+  setUser(null);
+  setCartCount(0);
+
+  localStorage.removeItem("user");
+  sessionStorage.removeItem("user");
+  localStorage.removeItem("rememberMe");
+};
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -229,7 +279,10 @@ const Navbar = () => {
           onClick={() => navigate("/cart")}
         />
 
-        <div className="cart-counter">0</div>
+       <div className="cart-counter">
+  {cartCount}
+</div>
+
       </div>
     </div>
   );
