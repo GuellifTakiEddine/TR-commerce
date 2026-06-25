@@ -9,7 +9,8 @@ const ProductDetails = () => {
   const [quantity, setQuantity] = useState(1);
   const [selectedImage, setSelectedImage] = useState("");
   const [selectedSize, setSelectedSize] = useState("");
-
+const [user, setUser] = useState(null);
+const [loadingCart, setLoadingCart] = useState(false);
   useEffect(() => {
     const fetchProduct = async () => {
       try {
@@ -52,7 +53,15 @@ if (!Array.isArray(data.sizes)) {
 
     fetchProduct();
   }, [id]);
+useEffect(() => {
+  const storedUser =
+    localStorage.getItem("user") ||
+    sessionStorage.getItem("user");
 
+  if (storedUser) {
+    setUser(JSON.parse(storedUser));
+  }
+}, []);
   if (!product) {
     return (
       <div className="pd-loading">
@@ -74,9 +83,60 @@ const currentSize = sizes.find(
       ? Number(product.quantity || 0)
       : Number(currentSize?.quantity || 0);
 
-      console.log("PRODUCT =", product);
-console.log("SIZES =", product.sizes);
-console.log("PARSED SIZES =", sizes);
+      
+const addToCart = async () => {
+  if (!user?._id) {
+    alert("Please login first");
+    return;
+  }
+
+  if (stock === 0) {
+    alert("This product is out of stock");
+    return;
+  }
+
+  if (product.type !== "Accessories" && !selectedSize) {
+    alert("Please select a size");
+    return;
+  }
+
+  try {
+    setLoadingCart(true);
+
+    const res = await fetch("http://localhost:5000/cart", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        userId: user._id,
+        productId: product._id,
+        quantity,
+        size:
+          product.type === "Accessories"
+            ? "default"
+            : selectedSize,
+        color: "default",
+      }),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      throw new Error(data.error || "Failed to add to cart");
+    }
+
+    alert("Added to cart 🛒");
+
+    // Update navbar cart counter
+    window.dispatchEvent(new Event("cartUpdated"));
+  } catch (err) {
+    console.error(err);
+    alert("Failed to add to cart");
+  } finally {
+    setLoadingCart(false);
+  }
+};
   return (
     <div className="pd-container">
 
@@ -247,9 +307,13 @@ console.log("PARSED SIZES =", sizes);
     </div>
   )}
 
-  <button className="pd-cart-btn">
-    Add To Cart
-  </button>
+  <button
+  className="pd-cart-btn"
+  onClick={addToCart}
+  disabled={loadingCart || stock === 0}
+>
+  {loadingCart ? "ADDING..." : "Add To Cart"}
+</button>
 
   <button className="pd-buy-btn">
     Buy Now
