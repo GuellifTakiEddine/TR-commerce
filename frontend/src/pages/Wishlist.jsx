@@ -73,15 +73,20 @@ const Wishlist = () => {
         >
           {wishlist.map((prod) => (
             <Product
-              key={prod._id}
-              {...prod}
-              title={prod.name}
-              images={[
-                prod.photos ||
-                prod["photos "] ||
-                "https://via.placeholder.com/300",
-              ]}
-            />
+  key={prod._id}
+  {...prod}
+  title={prod.name}
+  images={[
+    prod.photos ||
+    prod["photos "] ||
+    "https://via.placeholder.com/300",
+  ]}
+  onWishlistRemoved={() =>
+    setWishlist(prev =>
+      prev.filter(item => item._id !== prod._id)
+    )
+  }
+/>
           ))}
         </div>
       )}

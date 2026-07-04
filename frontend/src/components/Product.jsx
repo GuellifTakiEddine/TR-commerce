@@ -4,7 +4,15 @@ import wishIconFilled from "./images/wishlist-filled.svg";
 import "./product.css";
 import { useNavigate } from "react-router-dom";
 
-const Product = ({ _id, title, brand, price, colors, images }) => {
+const Product = ({
+  _id,
+  title,
+  brand,
+  price,
+  colors,
+  images,
+  onWishlistRemoved,
+}) => {
   const [isWished, setIsWished] = useState(false);
   const [user, setUser] = useState(null);
   const [loadingCart, setLoadingCart] = useState(false);
@@ -75,45 +83,58 @@ const Product = ({ _id, title, brand, price, colors, images }) => {
   }, [user, _id]);
 
   const toggleWishlist = async (e) => {
-    e.stopPropagation();
+  e.stopPropagation();
 
-    if (!user?._id) {
-      alert("Login first");
-      return;
-    }
+  if (!user?._id) {
+    alert("Login first");
+    return;
+  }
 
-    try {
-      if (isWished) {
-        await fetch(
-          `http://localhost:5000/wishlist/${user._id}/${_id}`,
-          {
-            method: "DELETE",
-          }
-        );
+  try {
+    if (isWished) {
+      const res = await fetch(
+        `http://localhost:5000/wishlist/${user._id}/${_id}`,
+        {
+          method: "DELETE",
+        }
+      );
 
-        setIsWished(false);
-      } else {
-        await fetch(
-          "http://localhost:5000/wishlist",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type":
-                "application/json",
-            },
-            body: JSON.stringify({
-              userId: user._id,
-              productId: _id,
-            }),
-          }
-        );
-
-        setIsWished(true);
+      if (!res.ok) {
+        throw new Error("Delete failed");
       }
-    } catch (err) {
-      console.error(err);
+
+      setIsWished(false);
+
+      // Remove immediately from Wishlist page
+      if (onWishlistRemoved) {
+        onWishlistRemoved();
+      }
+
+    } else {
+      const res = await fetch(
+        "http://localhost:5000/wishlist",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            userId: user._id,
+            productId: _id,
+          }),
+        }
+      );
+
+      if (!res.ok) {
+        throw new Error("Add failed");
+      }
+
+      setIsWished(true);
     }
-  };
+  } catch (err) {
+    console.error(err);
+  }
+};
 
   const addToCart = (e) => {
   e.stopPropagation();

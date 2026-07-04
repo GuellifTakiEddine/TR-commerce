@@ -173,45 +173,49 @@ const client = new MongoClient(url);
     // ====================================================
     // ADD TO WISHLIST
     // ====================================================
-    app.post("/wishlist", async (req, res) => {
-      try {
-        const { userId, productId } = req.body;
 
-        if (!userId || !productId) {
-          return res.status(400).json({
-            error: "Missing data",
-          });
-        }
+app.post("/wishlist", async (req, res) => {
+  try {
+    const { userId, productId } = req.body;
 
-        const existing = await wishlist.findOne({
-          userId: new ObjectId(userId),
-          productId: productId,
-        });
+    if (!userId || !productId) {
+      return res.status(400).json({
+        error: "Missing data",
+      });
+    }
 
-        if (existing) {
-          return res.json({
-            message: "Already in wishlist",
-          });
-        }
+    const uid = new ObjectId(userId);
+    const pid = new ObjectId(productId);
 
-        await wishlist.insertOne({
-          userId: new ObjectId(userId),
-          productId: productId,
-          createdAt: new Date(),
-        });
+    const existing = await wishlist.findOne({
+  userId: uid,
+  productId: pid,
+});
 
-        res.json({
-          message: "Added to wishlist",
-        });
 
-      } catch (err) {
-        console.log(err);
+    if (existing) {
+      return res.json({
+        message: "Already in wishlist",
+      });
+    }
 
-        res.status(500).json({
-          error: "Wishlist error",
-        });
-      }
+   await wishlist.insertOne({
+  userId: uid,
+  productId: pid,
+  createdAt: new Date(),
+});
+
+    res.json({
+      message: "Added to wishlist",
     });
+
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      error: "Wishlist error",
+    });
+  }
+});
 
     // ====================================================
     // GET WISHLIST
@@ -227,7 +231,7 @@ const client = new MongoClient(url);
 const result = await Promise.all(
   items.map(async (item) => {
     const product = await products.findOne({
-      _id: new ObjectId(item.productId),
+      _id: item.productId,
     });
 
     return product;
@@ -249,26 +253,31 @@ const result = await Promise.all(
     // REMOVE FROM WISHLIST
     // ====================================================
     app.delete("/wishlist/:userId/:productId", async (req, res) => {
-      try {
-        const { userId, productId } = req.params;
+  try {
+    const { userId, productId } = req.params;
 
-        await wishlist.deleteOne({
-          userId: new ObjectId(userId),
-          productId: productId,
-        });
-
-        res.json({
-          message: "Removed from wishlist",
-        });
-
-      } catch (err) {
-        console.log(err);
-
-        res.status(500).json({
-          error: "Wishlist delete error",
-        });
-      }
+    const result = await wishlist.deleteOne({
+      userId: new ObjectId(userId),
+      productId: new ObjectId(productId),
     });
+
+    if (result.deletedCount === 0) {
+      return res.status(404).json({
+        error: "Item not found",
+      });
+    }
+
+    res.json({
+      message: "Removed from wishlist",
+    });
+
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      error: "Wishlist delete error",
+    });
+  }
+});
 
     // =====================
 // ADD TO CART (FIXED)
@@ -384,7 +393,9 @@ app.post("/orders", async (req, res) => {
       status: "pending",
       createdAt: new Date(),
     });
-
+await cart.deleteMany({
+  userId: new ObjectId(userId),
+});
     res.json({
       message: "Order created",
       orderId: result.insertedId,
@@ -489,23 +500,24 @@ app.put("/cart/:id", async (req, res) => {
   try {
     const { quantity } = req.body;
 
-    const updatedItem = await Cart.findByIdAndUpdate(
-      req.params.id,
-      { quantity },
-      { new: true }
+    await cart.updateOne(
+      { _id: new ObjectId(req.params.id) },
+      {
+        $set: {
+          quantity: Number(quantity),
+        },
+      }
     );
 
-    if (!updatedItem) {
-      return res.status(404).json({
-        error: "Cart item not found",
-      });
-    }
+    const updatedItem = await cart.findOne({
+      _id: new ObjectId(req.params.id),
+    });
 
     res.json(updatedItem);
   } catch (err) {
-    console.error(err);
+    console.log(err);
     res.status(500).json({
-      error: "Server error",
+      error: "Update cart error",
     });
   }
 });

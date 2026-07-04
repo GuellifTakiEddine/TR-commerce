@@ -168,15 +168,35 @@ onClick={() => deleteOrder(order._id)}>
               <div key={i} className="order-item">
 
                 <img
-                  src={
-                    Array.isArray(item.product?.photos)
-                      ? item.product.photos[0]
-                      : item.product?.photos ||
-                        "https://via.placeholder.com/60"
-                  }
-                  alt={item.product?.name}
-                  className="order-img"
-                />
+  className="order-img"
+  src={(() => {
+    let photos = item.product?.photos;
+
+    try {
+      if (typeof photos === "string") {
+        photos = JSON.parse(photos);
+      }
+
+      if (
+        Array.isArray(photos) &&
+        typeof photos[0] === "string" &&
+        photos[0].startsWith("[")
+      ) {
+        photos = JSON.parse(photos[0]);
+      }
+
+      return Array.isArray(photos)
+        ? photos[0]
+        : photos || "https://via.placeholder.com/60";
+    } catch {
+      return "https://via.placeholder.com/60";
+    }
+  })()}
+  alt={item.product?.name}
+  onError={(e) => {
+    e.target.src = "https://via.placeholder.com/60";
+  }}
+/>
 
                 <div className="order-info">
                   <span className="name">

@@ -11,7 +11,8 @@ const Cart = () => {
   const [promoCode, setPromoCode] = useState("");
   const [discount, setDiscount] = useState(0);
   const [shipping, setShipping] = useState(0);
-
+const [selectedWilaya, setSelectedWilaya] = useState("");
+const [showSuccess, setShowSuccess] = useState(false);
   const user = JSON.parse(
     localStorage.getItem("user") ||
       sessionStorage.getItem("user")
@@ -93,14 +94,25 @@ const handleCheckout = async () => {
 
     const data = await res.json();
 
-    console.log("ORDER CREATED:", data);
-
-    if (data.orderId) {
-      navigate(`/order/${data.orderId}`);
+    if (!res.ok) {
+      throw new Error(data.error || "Checkout failed");
     }
 
+    // Empty the cart in the UI
+    setCartItems([]);
+
+    // Update the navbar counter
+    window.dispatchEvent(new Event("cartUpdated"));
+setShowSuccess(true);
+
+  setTimeout(() => {
+  setShowSuccess(false);
+
+  // Go to home page
+  navigate("/");
+  },2000);
   } catch (err) {
-    console.log(err);
+    console.error(err);
     alert("Checkout failed");
   }
 };
@@ -170,15 +182,20 @@ const updateQuantity = async (item, newQty) => {
   // SHIPPING
   // =========================================
   const handleWilayaChange = (e) => {
-    const wilaya = e.target.value;
+  const wilaya = e.target.value;
 
-    if (wilaya === "Alger") setShipping(400);
-    else if (
-      ["Annaba", "Blida", "Oran"].includes(wilaya)
-    )
-      setShipping(600);
-    else setShipping(900);
-  };
+  setSelectedWilaya(wilaya);
+
+  if (wilaya === "Alger") {
+    setShipping(400);
+  } else if (
+    ["Annaba", "Blida", "Oran"].includes(wilaya)
+  ) {
+    setShipping(600);
+  } else {
+    setShipping(900);
+  }
+};
 const getProductImage = (product) => {
   if (!product?.photos)
     return "https://via.placeholder.com/400";
@@ -336,7 +353,21 @@ const getProductImage = (product) => {
               </div>
             )}
 
-<select onChange={handleWilayaChange}>
+<select
+  value={selectedWilaya}
+  onChange={handleWilayaChange}
+>
+{!selectedWilaya && (
+  <p
+    style={{
+      color: "#e63946",
+      fontSize: "14px",
+      marginTop: "8px",
+    }}
+  >
+    Please choose your wilaya before checking out.
+  </p>
+)}
   <option>Select Wilaya</option>
 
   <option>Adrar</option>
@@ -423,7 +454,11 @@ const getProductImage = (product) => {
               <h1>{total} DA</h1>
             </div>
 
-           <button className="checkout-btn" onClick={handleCheckout}>
+           <button
+  className="checkout-btn"
+  onClick={handleCheckout}
+  disabled={!selectedWilaya}
+>
   CONTINUE TO CHECKOUT
 </button>
 
@@ -431,7 +466,32 @@ const getProductImage = (product) => {
 
         </div>
       )}
+      
+      
 
+      {showSuccess && (
+        <div className="checkout-success">
+          <div className="checkout-success-box">
+
+            <div className="checkmark-circle">
+              ✓
+            </div>
+
+            <h2>Thank You!</h2>
+
+            <p>
+              Your order has been placed successfully.
+            </p>
+
+            <small>
+              Redirecting to Home...
+            </small>
+
+          </div>
+        </div>
+      )}
+
+      
       <Footer />
     </div>
   );
