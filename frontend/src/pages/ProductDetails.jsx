@@ -211,7 +211,7 @@ const addToCart = async () => {
     <div className="size-row">
 
       {(product.type === "T-Shirts" ||
-        product.type === "Shoes" || product.type === "Tops" || product.type === "Pants & Dresses") && (
+        product.type === "Shoes" || product.type === "Tops" ) && (
         <div className="size-buttons">
 
           {sizes.map((s) => (
@@ -233,7 +233,7 @@ const addToCart = async () => {
         </div>
       )}
 
-      {product.type === "Pants" && (
+      {(product.type === "Pants" || product.type === "Pants & Dresses"|| product.type === "Pyjama" || product.type === "Puffer jacket" || product.type === "Jumpsuit" ) && (
         <select
           className="size-select"
           value={selectedSize}
@@ -253,7 +253,7 @@ const addToCart = async () => {
       )}
 
       <div className={
-    product.type === "Pants"
+    product.type === "Pants" || product.type === "Pants & Dresses" || product.type === "Pyjama" || product.type === "Puffer jacket" || product.type === "Jumpsuit"
       ? "pd-quantity pants-quantity"
       : "pd-quantity shirts-quantity"
   }>
